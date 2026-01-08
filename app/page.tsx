@@ -1,6 +1,7 @@
 'use server';
 
 import { neon } from '@neondatabase/serverless';
+import { Analytics } from "@vercel/analytics/next";
 
 export async function getUsers() {
   const sql = neon(process.env.DATABASE_URL!);
