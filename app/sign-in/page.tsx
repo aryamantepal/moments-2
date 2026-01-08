@@ -10,7 +10,6 @@ export default function Page() {
         const sql = neon(process.env.DATABASE_URL!);
         const email = formData.get('email') as string;
         const password = formData.get('password') as string;
-        // const hashedPassword = await bcrypt.hash(password, 10);
 
         const users = await sql`
       SELECT * FROM users WHERE email = ${email} LIMIT 1
