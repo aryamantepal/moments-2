@@ -42,8 +42,8 @@ export default function Page() {
         <div>
             <h1>Sign-in Page</h1>
             <form action={signIn}>
-                <input name="email" type="email" required />
-                <input name="password" type="password" required />
+                <input name="email" type="email" placeholder="Enter your email" required />
+                <input name="password" type="password" placeholder="Enter your password" required />
                 <button type="submit">Submit</button>
             </form>
         </div>

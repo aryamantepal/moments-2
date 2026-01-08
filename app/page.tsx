@@ -1,31 +1,35 @@
-'use server';
-
-import { neon } from '@neondatabase/serverless';
 import { Analytics } from "@vercel/analytics/next";
-
-export async function getUsers() {
-  const sql = neon(process.env.DATABASE_URL!);
-
-  // Tell TypeScript exactly what each row looks like
-  const users = await sql`
-    SELECT *
-    FROM users
-  `;
-
-  return users;
-}
+import { cookies } from 'next/headers';
+import { neon } from '@neondatabase/serverless';
+import { redirect } from 'next/navigation';
 
 export default async function Page() {
-  const users = await getUsers();
+
+  const cookieStore = await cookies();
+  const userId = cookieStore.get('user_id')?.value;
+
+  if (!userId) {
+    redirect("/sign-in");
+  }
+
+  const sql = neon(process.env.DATABASE_URL!);
+  const users = await sql`
+  select email from users where id = ${userId} LIMIT 1
+  `
+  const user = users[0];
   return (
     <div>
-      <ol className="list-decimal list-inside font-(family-name:--font-geist-sans) text-[#333333]">
-        {users.map((user) => (
-          <li key={user.id} className="mb-2">
-            {user.email}
-          </li>
-        ))}
-      </ol>
+      <h1>Welcome, {user.email}</h1>
+      <form action={signOut}>
+        <button type="submit">Sign Out</button>
+      </form>
     </div>
   );
+}
+
+async function signOut() {
+  'use server';
+  const cookieStore = await cookies();
+  cookieStore.delete('user_id');
+  redirect('/sign-in');
 }
