@@ -2,7 +2,7 @@ import { neon } from '@neondatabase/serverless';
 import * as bcrypt from 'bcrypt';
 
 export default function Page() {
-    async function create(formData: FormData) {
+    async function get(formData: FormData) {
         'use server';
 
         const sql = neon(process.env.DATABASE_URL!);
@@ -18,8 +18,8 @@ export default function Page() {
 
     return (
         <div>
-            <h1>Sign-up Page</h1>
-            <form action={create}>
+            <h1>Sign-in Page</h1>
+            <form action={get}>
                 <input type="email" name="email" placeholder="Enter your email" />
                 <input type="password" name="password" placeholder="Enter your password" />
                 <button type="submit">Submit</button>
