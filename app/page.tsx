@@ -19,12 +19,16 @@ export default async function Page() {
   const user = users[0];
   return (
     <div className="flex items-center justify-center h-screen">
-      <h1>Welcome, {user.email}</h1>
-      <form action={signOut}>
-        <button type="submit">Sign Out</button>
-      </form>
+      <div className="flex flex-col items-center gap-4">
+        <h1>Welcome, {user.email}</h1>
+
+        <form action={signOut}>
+          <button type="submit">Sign Out</button>
+        </form>
+      </div>
     </div>
   );
+
 }
 
 async function signOut() {
