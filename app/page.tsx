@@ -11,8 +11,8 @@ export default function Page() {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await sql`
-      INSERT INTO users (email)
-      VALUES (${email})
+      INSERT INTO users (email, password_hash)
+      VALUES (${email}, ${hashedPassword})
     `;
   }
 
