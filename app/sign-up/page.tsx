@@ -1,5 +1,6 @@
 import { neon } from '@neondatabase/serverless';
 import * as bcrypt from 'bcrypt';
+import Link from 'next/link';
 
 export default function Page() {
     async function create(formData: FormData) {
@@ -40,6 +41,9 @@ export default function Page() {
                     >
                         Submit
                     </button>
+                    <Link href="/sign-in" className="text-sm underline cursor-pointer">
+                        Have an account? Click here to sign in
+                    </Link>
                 </form>
             </div>
         </div>

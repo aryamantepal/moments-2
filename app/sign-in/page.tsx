@@ -2,6 +2,7 @@ import { neon } from '@neondatabase/serverless';
 import * as bcrypt from 'bcrypt';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import Link from 'next/link';
 
 export default function Page() {
     async function signIn(formData: FormData) {
@@ -41,29 +42,32 @@ export default function Page() {
         <div className='flex items-center justify-center h-screen'>
             <div className='flex flex-col gap'>
                 <h1 className='text-2xl font-semibold'>Sign-in Page</h1>
+                <form action={signIn} className='flex flex-col gap-3'>
+                    <input
+                        name="email"
+                        type="email"
+                        placeholder="Enter your email"
+                        required
+                        className='border p-2 rounded'
+                    />
+                    <input
+                        name="password"
+                        type="password"
+                        placeholder="Enter your password"
+                        required
+                        className='border p-2 rounded'
+                    />
+                    <button
+                        type="submit"
+                        className='bg-black text-white p-2 rounded'
+                    >
+                        Submit
+                    </button>
+                    <Link href="/sign-up" className="text-sm underline cursor-pointer">
+                        Don't have an account? Click here to sign up
+                    </Link>
+                </form>
             </div>
-            <form action={signIn} className='flex flex-col gap-3'>
-                <input
-                    name="email"
-                    type="email"
-                    placeholder="Enter your email"
-                    required
-                    className='border p-2 rounded'
-                />
-                <input
-                    name="password"
-                    type="password"
-                    placeholder="Enter your password"
-                    required
-                    className='border p-2 rounded'
-                />
-                <button
-                    type="submit"
-                    className='bg-black text-white p-2 rounded'
-                >
-                    Submit
-                </button>
-            </form>
         </div>
     );
 }
