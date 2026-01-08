@@ -1,36 +1,151 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Moments 🎶📷
+
+**Music for the photos you see.**
+
+Moments is a minimalist web app where every photo tells a story through song. Capture how you felt in an instant by pairing your photos with the perfect track.
+
+## What is Moments?
+
+Think **Instagram meets Spotify** — a feed of photo moments, each paired with a song that defines the vibe. No filters, no endless scrolling, just pure emotional snapshots backed by music.
+
+## Features
+
+### MVP (Week 1)
+- 📸 **Upload photos** with drag-and-drop simplicity
+- 🎵 **Search and attach songs** from Spotify's catalog
+- ✏️ **Add captions** to give context to your moment
+- 🧭 **Browse a feed** of moments from friends
+- ❤️ **Like and react** to moments that resonate
+
+### Coming Soon
+- 🌐 **Explore feed** — discover moments from the community
+- 🏷️ **Mood filtering** — find moments by vibe (chill, hype, melancholic, etc.)
+- 🤖 **AI song suggestions** — get track recommendations based on your photo
+- 🔗 **Shareable story links** — send your moment to anyone, even non-users
+- 👥 **Friend system** — follow people whose taste you love
+
+## Tech Stack
+
+**Frontend**
+- Next.js 14+ (App Router) — Fast, modern React framework
+- TypeScript — Type safety for fewer bugs
+- Tailwind CSS — Rapid, responsive styling
+- shadcn/ui — Beautiful, customizable components
+
+**Backend**
+- Next.js API Routes — Serverless functions, no separate backend
+- Prisma ORM — Type-safe database access
+- PostgreSQL — Reliable, scalable data storage (via Supabase/Railway)
+
+**Services**
+- Clerk / NextAuth.js — Authentication solved
+- Uploadthing / Cloudinary — Hassle-free image uploads
+- Spotify Web API — Song search and embeds
+
+**Deployment**
+- Vercel — Zero-config deployment with Git push
+
+## Why This Stack?
+
+Built for **speed**. Single codebase, typed end-to-end, deploys in seconds. No microservices complexity, no container orchestration — just ship features fast.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+- Node.js 18+
+- PostgreSQL database (free tier: [Railway](https://railway.app) or [Supabase](https://supabase.com))
+- Spotify Developer account
+- Clerk account (for auth)
+
+### Installation
 
 ```bash
+# Clone the repo
+git clone https://github.com/aryamantepal/moments.git
+cd moments
+
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env.local
+# Add your API keys (see .env.example for required vars)
+
+# Initialize database
+npx prisma db push
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) and start posting moments.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+moments/
+├── app/
+│   ├── (auth)/          # Login/signup flows
+│   ├── (main)/          # Main app pages (feed, upload, profile)
+│   └── api/             # API routes (moments, upload, Spotify)
+├── components/          # Reusable UI components
+│   ├── ui/              # shadcn base components
+│   └── ...              # MomentCard, UploadForm, etc.
+├── lib/                 # Utilities and helpers
+│   ├── db.ts            # Prisma client
+│   └── spotify.ts       # Spotify API integration
+├── prisma/
+│   └── schema.prisma    # Database schema
+└── public/              # Static assets
+```
 
-## Learn More
+## Database Schema
 
-To learn more about Next.js, take a look at the following resources:
+```prisma
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  moments   Moment[]
+  likes     Like[]
+}
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+model Moment {
+  id         String   @id @default(cuid())
+  userId     String
+  imageUrl   String
+  songId     String   // Spotify track ID
+  songName   String
+  artistName String
+  caption    String?
+  likes      Like[]
+  createdAt  DateTime @default(now())
+}
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+model Like {
+  id       String @id @default(cuid())
+  userId   String
+  momentId String
+  
+  @@unique([userId, momentId])
+}
+```
 
-## Deploy on Vercel
+## Roadmap
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Week 1** — MVP with upload, feed, and likes  
+**Week 2** — Friend system and user profiles  
+**Week 3** — Explore feed with mood filters  
+**Week 4** — AI song suggestions and shareable links  
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Contributing
+
+This is a personal project for now, but feel free to fork and experiment. If you have ideas or find bugs, open an issue!
+
+## License
+
+MIT — Use this however you want.
+
+---
+
+**Built with ☕ and good music.**
