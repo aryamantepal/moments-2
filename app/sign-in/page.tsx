@@ -38,12 +38,31 @@ export default function Page() {
     }
 
     return (
-        <div>
-            <h1>Sign-in Page</h1>
-            <form action={signIn}>
-                <input name="email" type="email" placeholder="Enter your email" required />
-                <input name="password" type="password" placeholder="Enter your password" required />
-                <button type="submit">Submit</button>
+        <div className='flex items-center justify-center h-screen'>
+            <div className='flex flex-col gap'>
+                <h1 className='text-2xl font-semibold'>Sign-in Page</h1>
+            </div>
+            <form action={signIn} className='flex flex-col gap-3'>
+                <input
+                    name="email"
+                    type="email"
+                    placeholder="Enter your email"
+                    required
+                    className='border p-2 rounded'
+                />
+                <input
+                    name="password"
+                    type="password"
+                    placeholder="Enter your password"
+                    required
+                    className='border p-2 rounded'
+                />
+                <button
+                    type="submit"
+                    className='bg-black text-white p-2 rounded'
+                >
+                    Submit
+                </button>
             </form>
         </div>
     );

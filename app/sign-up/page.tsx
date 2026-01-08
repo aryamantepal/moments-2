@@ -17,13 +17,32 @@ export default function Page() {
     }
 
     return (
-        <div>
-            <h1>Sign-up Page</h1>
-            <form action={create}>
-                <input type="email" name="email" placeholder="Enter your email" />
-                <input type="password" name="password" placeholder="Enter your password" />
-                <button type="submit">Submit</button>
-            </form>
+        <div className="flex items-center justify-center h-screen">
+            <div className="flex flex-col gap-4">
+                <h1 className="text-2xl font-semibold">Sign-up Page</h1>
+
+                <form action={create} className="flex flex-col gap-3">
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        className="border p-2 rounded"
+                    />
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        className="border p-2 rounded"
+                    />
+                    <button
+                        type="submit"
+                        className="bg-black text-white p-2 rounded"
+                    >
+                        Submit
+                    </button>
+                </form>
+            </div>
         </div>
     );
+
 }

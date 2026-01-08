@@ -18,7 +18,7 @@ export default async function Page() {
   `
   const user = users[0];
   return (
-    <div>
+    <div className="flex items-center justify-center h-screen">
       <h1>Welcome, {user.email}</h1>
       <form action={signOut}>
         <button type="submit">Sign Out</button>
