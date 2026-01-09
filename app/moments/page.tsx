@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 import { neon } from '@neondatabase/serverless';
 import { redirect } from 'next/navigation';
 
-export default async function Page() {
+export default async function Moments() {
 
     const cookieStore = await cookies();
     const userId = cookieStore.get('user_id')?.value;
