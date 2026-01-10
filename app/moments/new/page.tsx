@@ -3,10 +3,18 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { put } from '@vercel/blob';
 import { neon } from "@neondatabase/serverless";
+import { cookies } from 'next/headers';
 
 export default function Page() {
     async function create(formData: FormData) {
         'use server';
+
+        const cookieStore = await cookies();
+        const userId = cookieStore.get('user_id')?.value;
+
+        if (!userId) {
+            redirect("/sign-in");
+        }
 
         const sql = neon(process.env.DATABASE_URL!);
         const caption = formData.get("caption") as string;
