@@ -17,6 +17,7 @@ export default async function Page() {
   select email from users where id = ${userId} LIMIT 1
   `
   const user = users[0];
+  console.log(users);
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="flex flex-col items-center gap-4">
