@@ -2,10 +2,34 @@ import Form from "next/form";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { put } from '@vercel/blob';
+import { neon } from "@neondatabase/serverless";
 
 export default function Page() {
     async function create(formData: FormData) {
         'use server';
+
+        const sql = neon(process.env.DATABASE_URL!);
+        const caption = formData.get("caption") as string;
+        const location = formData.get("location") as string;
+        const image = formData.get("image") as File;
+
+        if (!image) {
+            throw new Error('Image is required');
+        }
+
+        const blob = await put(image.name, image, {
+            access: 'public',
+        });
+
+        await sql`
+  INSERT INTO moments (image_url, caption, location, author_id)
+  VALUES (
+    ${blob.url},
+    ${caption},
+    ${location},
+    ${Number(userId)}
+  )
+`;
     }
     return (
         <div className="max-w-2xl mx-auto p-4">
