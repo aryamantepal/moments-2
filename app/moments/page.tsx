@@ -18,6 +18,7 @@ export default async function Moments() {
     return (
         <div className="flex items-center justify-center h-screen">
             <div className="flex flex-col items-center gap-4">
+                Moments main display
             </div>
         </div>
     );
