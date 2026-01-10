@@ -12,9 +12,9 @@ export default async function Moments() {
     }
 
     const sql = neon(process.env.DATABASE_URL!);
-    const moments = await sql`
-  select * from moments
-  `
+    //     const moments = await sql`
+    //   select * from moments
+    //   `
     return (
         <div className="flex items-center justify-center h-screen">
             <div className="flex flex-col items-center gap-4">
