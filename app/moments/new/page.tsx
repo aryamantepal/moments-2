@@ -17,17 +17,19 @@ export default function Page() {
         }
 
         const sql = neon(process.env.DATABASE_URL!);
-        const caption = formData.get("caption") as string;
-        const location = formData.get("location") as string;
+        const caption = (formData.get("caption") as string) || null;
+        const location = (formData.get("location") as string) || null;
         const image = formData.get("image") as File;
 
         if (!image) {
             throw new Error('Image is required');
         }
 
-        const blob = await put(image.name, image, {
-            access: 'public',
-        });
+        const blob = await put(
+            `moments/${crypto.randomUUID()}-${image.name}`,
+            image,
+            { access: 'public' }
+        );
 
         await sql`
   INSERT INTO moments (image_url, caption, location, author_id)
@@ -38,6 +40,9 @@ export default function Page() {
     ${Number(userId)}
   )
 `;
+        revalidatePath('/');
+        redirect('/');
+
     }
     return (
         <div className="max-w-2xl mx-auto p-4">
