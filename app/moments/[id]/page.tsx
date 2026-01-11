@@ -2,9 +2,7 @@ import { neon } from '@neondatabase/serverless';
 import { notFound } from "next/navigation";
 import Image from "next/image";
 
-export default async function MomentPage(
-    { params }: { params: Promise<{ id: string }> }
-) {
+export default async function MomentPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const sql = neon(process.env.DATABASE_URL!);
     const moments = await sql`
