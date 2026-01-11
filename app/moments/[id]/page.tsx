@@ -20,6 +20,9 @@ export default async function MomentPage({ params }: { params: Promise<{ id: str
   WHERE moments.id = ${id}
   LIMIT 1;
   `
+    if (moments.length === 0) {
+        notFound();
+    }
     const moment = moments[0];
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center -mt-16">
@@ -35,7 +38,7 @@ export default async function MomentPage({ params }: { params: Promise<{ id: str
                     blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=="
                 />
                 <h1 className="text-4xl font-bold mb-8 text-[#333333]">{moment.caption || 'Untitled Moment'}</h1>
-                <p className="text-gray-600">by {moment.author.name}</p>
+                <p className="text-gray-600">by {moment.author_email}</p>
                 {moment.location && (
                     <p className="text-gray-500">📍 {moment.location}</p>
                 )}
