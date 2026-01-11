@@ -2,8 +2,8 @@ import { neon } from '@neondatabase/serverless';
 import { notFound } from "next/navigation";
 import Image from "next/image";
 
-export default async function MomentPage({ params }: { params: Promise<{ id: string }> }) {
-    const { id } = await params;
+export default async function MomentPage({ params }: { params: { id: string } }) {
+    const { id } = params;
 
     const sql = neon(process.env.DATABASE_URL!);
     const moments = await sql`
@@ -20,10 +20,8 @@ export default async function MomentPage({ params }: { params: Promise<{ id: str
   WHERE moments.id = ${id}
   LIMIT 1;
   `
-    if (moments.length === 0) {
-        notFound();
-    }
     const moment = moments[0];
+    if (!moment) notFound();
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center -mt-16">
             <article className="max-w-2xl space-y-4 font-(family-name:--font-geist-sans)">
