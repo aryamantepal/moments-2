@@ -7,7 +7,7 @@ import Link from 'next/link';
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
-export default async function Moments({ params }: { params: { user: string } }) {
+export default async function Moments({ params }: { params: Promise<{ user: string }> }) {
     const cookieStore = await cookies();
     const userId = cookieStore.get('user_id')?.value;
 
@@ -15,10 +15,11 @@ export default async function Moments({ params }: { params: { user: string } }) 
         redirect('/sign-in');
     }
 
-    const sql = neon(process.env.DATABASE_URL!);
+    // Await params since it's now a Promise in Next.js 15
+    const { user } = await params;
+    const username = decodeURIComponent(user);
 
-    // Decode the user parameter in case it has URL encoding
-    const userEmail = decodeURIComponent(params.user);
+    const sql = neon(process.env.DATABASE_URL!);
 
     const moments = await sql`
         SELECT
@@ -28,17 +29,18 @@ export default async function Moments({ params }: { params: { user: string } }) 
             moments.location,
             moments.created_at,
             users.id AS author_id,
+            users.name AS author_name,
             users.email AS author_email
         FROM moments
         JOIN users ON users.id = moments.author_id
-        WHERE users.email = ${userEmail}
+        WHERE users.name = ${username}
         ORDER BY moments.created_at DESC
     `;
 
     return (
         <div className="min-h-screen bg-gray-50 py-8 px-4">
             <h1 className="text-4xl font-bold mb-8 text-center text-[#333333]">
-                Moments by {userEmail}
+                Moments by {username}
             </h1>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-6xl mx-auto">
@@ -66,7 +68,7 @@ export default async function Moments({ params }: { params: { user: string } }) 
                                             {moment.caption}
                                         </p>
                                     )}
-                                    <p className="text-sm">by {moment.author_email}</p>
+                                    <p className="text-sm">by {moment.author_name}</p>
                                 </div>
                             </div>
                         </div>
