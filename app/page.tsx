@@ -21,7 +21,7 @@ export default async function Page() {
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="flex flex-col items-center gap-4">
-        <h1>Welcome, {user.email}</h1>
+        <h1>Welcome, {user.name}</h1>
         <form action={signOut}>
           <button type="submit">Sign Out</button>
         </form>
