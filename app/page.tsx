@@ -14,7 +14,7 @@ export default async function Page() {
 
   const sql = neon(process.env.DATABASE_URL!);
   const users = await sql`
-  select email from users where id = ${userId} LIMIT 1
+  select name from users where id = ${userId} LIMIT 1
   `
   const user = users[0];
   console.log(users);
