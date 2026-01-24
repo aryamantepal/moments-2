@@ -40,13 +40,13 @@ export default function Page() {
     }
 
     return (
-        <div className='min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 flex items-center justify-center p-4'>
+        <div className='min-h-screen bg-linear-to-br from-purple-50 via-pink-50 to-blue-50 flex items-center justify-center p-4'>
             <div className='w-full max-w-md'>
                 {/* Logo */}
                 <div className="text-center mb-8">
                     <Link href="/" className="inline-flex items-center space-x-2 mb-2">
                         <Sparkles className="w-8 h-8 text-purple-600" />
-                        <span className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                        <span className="text-3xl font-bold bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                             Moments
                         </span>
                     </Link>
@@ -99,7 +99,7 @@ export default function Page() {
                         {/* Submit Button */}
                         <button
                             type="submit"
-                            className='w-full mt-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all'
+                            className='w-full mt-2 bg-linear-to-r from-purple-600 to-pink-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all'
                         >
                             Sign In
                         </button>
