@@ -62,7 +62,7 @@ export default async function UserProfile({ params }: { params: Promise<{ user: 
     const isOwnProfile = currentUser.name === username;
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50">
+        <div className="min-h-screen bg-linear-to-br from-purple-50 via-pink-50 to-blue-50">
             <Navbar userName={currentUser.name} />
 
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -79,7 +79,7 @@ export default async function UserProfile({ params }: { params: Promise<{ user: 
                 <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
                     <div className="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
                         {/* Avatar */}
-                        <div className="w-32 h-32 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg">
+                        <div className="w-32 h-32 bg-linear-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg">
                             <span className="text-white font-bold text-5xl">
                                 {username.charAt(0).toUpperCase()}
                             </span>
@@ -120,7 +120,7 @@ export default async function UserProfile({ params }: { params: Promise<{ user: 
                             {isOwnProfile && (
                                 <Link
                                     href="/moments/new"
-                                    className="inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all"
+                                    className="inline-flex items-center space-x-2 px-6 py-3 bg-linear-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all"
                                 >
                                     <ImageIcon className="w-4 h-4" />
                                     <span>Add New Moment</span>
@@ -166,7 +166,7 @@ export default async function UserProfile({ params }: { params: Promise<{ user: 
                                         />
 
                                         {/* Overlay on hover */}
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                             <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
                                                 {moment.caption && (
                                                     <p className="font-semibold text-lg mb-2 line-clamp-2">
@@ -231,7 +231,7 @@ export default async function UserProfile({ params }: { params: Promise<{ user: 
                             {isOwnProfile && (
                                 <Link
                                     href="/moments/new"
-                                    className="inline-block px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all"
+                                    className="inline-block px-6 py-3 bg-linear-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all"
                                 >
                                     Create Your First Moment
                                 </Link>
