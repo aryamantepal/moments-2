@@ -16,7 +16,7 @@ export default function Navbar({ userName, currentPage }: NavbarProps) {
                     {/* Logo */}
                     <Link href="/moments" className="flex items-center space-x-2 group">
                         <Sparkles className="w-6 h-6 text-purple-600 group-hover:text-pink-600 transition-colors" />
-                        <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                        <span className="text-2xl font-bold bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                             Moments
                         </span>
                     </Link>
@@ -26,8 +26,8 @@ export default function Navbar({ userName, currentPage }: NavbarProps) {
                         <Link
                             href="/moments"
                             className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all ${currentPage === 'moments'
-                                    ? 'bg-purple-50 text-purple-700 font-medium'
-                                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                                ? 'bg-purple-50 text-purple-700 font-medium'
+                                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                                 }`}
                         >
                             <Home className="w-4 h-4" />
@@ -48,7 +48,7 @@ export default function Navbar({ userName, currentPage }: NavbarProps) {
                         {/* User Profile */}
                         {userName && (
                             <div className="hidden sm:flex items-center space-x-3">
-                                <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                                <div className="w-8 h-8 bg-linear-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
                                     <span className="text-white font-semibold text-sm">
                                         {userName.charAt(0).toUpperCase()}
                                     </span>

@@ -147,7 +147,7 @@ export default async function Moments() {
                             </p>
                             <Link
                                 href="/moments/new"
-                                className="inline-block px-6 py-3 bg-linear-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all"
+                                className="inline-block px-6 py-3 bg-linear`-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all"
                             >
                                 Create First Moment
                             </Link>
