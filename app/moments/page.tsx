@@ -45,7 +45,6 @@ export default async function Moments() {
             <Navbar userName={user.name} currentPage="moments" />
 
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                {/* Header */}
                 <div className="flex items-center justify-between mb-8">
                     <div>
                         <h1 className="text-4xl font-bold text-gray-900 mb-2">
@@ -64,7 +63,6 @@ export default async function Moments() {
                     </Link>
                 </div>
 
-                {/* Moments Grid */}
                 {moments.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {moments.map((moment) => (
@@ -74,7 +72,6 @@ export default async function Moments() {
                                 className="group block"
                             >
                                 <div className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                                    {/* Image */}
                                     <div className="relative aspect-square overflow-hidden bg-gray-100">
                                         <Image
                                             src={moment.image_url}
@@ -83,8 +80,6 @@ export default async function Moments() {
                                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                             className="object-cover transition-transform duration-500 group-hover:scale-110"
                                         />
-
-                                        {/* Overlay on hover */}
                                         <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                             <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
                                                 {moment.caption && (
@@ -102,7 +97,6 @@ export default async function Moments() {
                                         </div>
                                     </div>
 
-                                    {/* Card Footer */}
                                     <div className="p-4">
                                         <div className="flex items-center justify-between">
                                             <div className="flex items-center space-x-2">
@@ -133,7 +127,6 @@ export default async function Moments() {
                         ))}
                     </div>
                 ) : (
-                    /* Empty State */
                     <div className="bg-white rounded-2xl p-12 text-center border-2 border-dashed border-gray-200">
                         <div className="max-w-md mx-auto">
                             <div className="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">

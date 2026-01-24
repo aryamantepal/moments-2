@@ -42,7 +42,6 @@ export default function Page() {
     return (
         <div className='min-h-screen bg-linear-to-br from-purple-50 via-pink-50 to-blue-50 flex items-center justify-center p-4'>
             <div className='w-full max-w-md'>
-                {/* Logo */}
                 <div className="text-center mb-8">
                     <Link href="/" className="inline-flex items-center space-x-2 mb-2">
                         <Sparkles className="w-8 h-8 text-purple-600" />
@@ -53,7 +52,6 @@ export default function Page() {
                     <p className="text-gray-600 mt-2">Welcome back! Sign in to continue</p>
                 </div>
 
-                {/* Sign In Card */}
                 <div className='bg-white rounded-2xl shadow-xl p-8'>
                     <h1 className='text-2xl font-bold text-gray-900 mb-6'>Sign In</h1>
 
@@ -77,7 +75,6 @@ export default function Page() {
                             </div>
                         </div>
 
-                        {/* Password Input */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                                 Password
@@ -96,7 +93,6 @@ export default function Page() {
                             </div>
                         </div>
 
-                        {/* Submit Button */}
                         <button
                             type="submit"
                             className='w-full mt-2 bg-linear-to-r from-purple-600 to-pink-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all'
@@ -104,7 +100,6 @@ export default function Page() {
                             Sign In
                         </button>
 
-                        {/* Sign Up Link */}
                         <div className="text-center mt-4">
                             <p className="text-sm text-gray-600">
                                 Don't have an account?{' '}

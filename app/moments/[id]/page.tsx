@@ -49,7 +49,6 @@ export default async function MomentPage({ params }: { params: Promise<{ id: str
             <Navbar userName={currentUser.name} />
 
             <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                {/* Back Button */}
                 <Link
                     href="/moments"
                     className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors"
@@ -59,7 +58,6 @@ export default async function MomentPage({ params }: { params: Promise<{ id: str
                 </Link>
 
                 <div className="grid lg:grid-cols-3 gap-8">
-                    {/* Image Section */}
                     <div className="lg:col-span-2">
                         <div className="bg-white rounded-2xl overflow-hidden shadow-xl">
                             <div className="relative aspect-square bg-gray-100">
@@ -73,7 +71,6 @@ export default async function MomentPage({ params }: { params: Promise<{ id: str
                                 />
                             </div>
 
-                            {/* Image Actions */}
                             <div className="p-6 border-t border-gray-100">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center space-x-4">
@@ -95,10 +92,8 @@ export default async function MomentPage({ params }: { params: Promise<{ id: str
                         </div>
                     </div>
 
-                    {/* Details Section */}
                     <div className="lg:col-span-1">
                         <div className="bg-white rounded-2xl shadow-xl p-6 space-y-6 sticky top-24">
-                            {/* Author Info */}
                             <div>
                                 <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
                                     Posted By
@@ -120,7 +115,6 @@ export default async function MomentPage({ params }: { params: Promise<{ id: str
                                 </div>
                             </div>
 
-                            {/* Caption */}
                             {moment.caption && (
                                 <div>
                                     <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
@@ -132,7 +126,6 @@ export default async function MomentPage({ params }: { params: Promise<{ id: str
                                 </div>
                             )}
 
-                            {/* Location */}
                             {moment.location && (
                                 <div>
                                     <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
@@ -145,7 +138,6 @@ export default async function MomentPage({ params }: { params: Promise<{ id: str
                                 </div>
                             )}
 
-                            {/* Date */}
                             <div>
                                 <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
                                     Date

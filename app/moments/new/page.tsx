@@ -16,7 +16,6 @@ export default async function Page() {
         redirect("/sign-in");
     }
 
-    // Get user info for navbar
     const sql = neon(process.env.DATABASE_URL!);
     const users = await sql`
         SELECT name FROM users WHERE id = ${userId} LIMIT 1
@@ -67,7 +66,6 @@ export default async function Page() {
             <Navbar userName={user.name} />
 
             <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                {/* Back Button */}
                 <Link
                     href="/moments"
                     className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors"
@@ -76,7 +74,6 @@ export default async function Page() {
                     <span>Back to moments</span>
                 </Link>
 
-                {/* Header */}
                 <div className="mb-8">
                     <h1 className="text-4xl font-bold text-gray-900 mb-2">
                         Create New Moment
@@ -86,10 +83,8 @@ export default async function Page() {
                     </p>
                 </div>
 
-                {/* Form Card */}
                 <div className="bg-white rounded-2xl shadow-xl p-8">
                     <Form action={create} className="space-y-6">
-                        {/* Image Upload */}
                         <div>
                             <label htmlFor="image" className="flex items-center space-x-2 text-sm font-semibold text-gray-700 mb-3">
                                 <ImageIcon className="w-4 h-4 text-purple-600" />
@@ -110,7 +105,6 @@ export default async function Page() {
                             </p>
                         </div>
 
-                        {/* Caption */}
                         <div>
                             <label htmlFor="caption" className="flex items-center space-x-2 text-sm font-semibold text-gray-700 mb-3">
                                 <Type className="w-4 h-4 text-purple-600" />
@@ -128,7 +122,6 @@ export default async function Page() {
                             </p>
                         </div>
 
-                        {/* Location */}
                         <div>
                             <label htmlFor="location" className="flex items-center space-x-2 text-sm font-semibold text-gray-700 mb-3">
                                 <MapPin className="w-4 h-4 text-purple-600" />
@@ -146,7 +139,6 @@ export default async function Page() {
                             </p>
                         </div>
 
-                        {/* Submit Button */}
                         <div className="pt-4">
                             <button
                                 type="submit"
@@ -159,7 +151,6 @@ export default async function Page() {
                     </Form>
                 </div>
 
-                {/* Tips Section */}
                 <div className="mt-8 bg-purple-50 rounded-2xl p-6 border border-purple-100">
                     <h3 className="font-semibold text-purple-900 mb-3">Tips for great moments:</h3>
                     <ul className="space-y-2 text-sm text-purple-800">
