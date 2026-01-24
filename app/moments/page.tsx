@@ -41,7 +41,7 @@ export default async function Moments() {
     `;
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50">
+        <div className="min-h-screen bg-linear-to-br from-purple-50 via-pink-50 to-blue-50">
             <Navbar userName={user.name} currentPage="moments" />
 
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -57,7 +57,7 @@ export default async function Moments() {
                     </div>
                     <Link
                         href="/moments/new"
-                        className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all"
+                        className="flex items-center space-x-2 px-6 py-3 bg-linear-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all"
                     >
                         <Plus className="w-5 h-5" />
                         <span className="hidden sm:inline">New Moment</span>
@@ -85,7 +85,7 @@ export default async function Moments() {
                                         />
 
                                         {/* Overlay on hover */}
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                             <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
                                                 {moment.caption && (
                                                     <p className="font-semibold text-lg mb-2 line-clamp-2">
@@ -106,7 +106,7 @@ export default async function Moments() {
                                     <div className="p-4">
                                         <div className="flex items-center justify-between">
                                             <div className="flex items-center space-x-2">
-                                                <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                                                <div className="w-8 h-8 bg-linear-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
                                                     <span className="text-white font-semibold text-xs">
                                                         {moment.author_name?.charAt(0).toUpperCase() || moment.author_email.charAt(0).toUpperCase()}
                                                     </span>
@@ -147,7 +147,7 @@ export default async function Moments() {
                             </p>
                             <Link
                                 href="/moments/new"
-                                className="inline-block px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all"
+                                className="inline-block px-6 py-3 bg-linear-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all"
                             >
                                 Create First Moment
                             </Link>
