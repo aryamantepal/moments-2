@@ -5,7 +5,14 @@ import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import { Sparkles, Mail, Lock, User } from 'lucide-react';
 
-export default function Page() {
+export default async function Page() {
+
+    const cookieStore = await cookies();
+    const userId = cookieStore.get('user_id');
+
+    if (userId) {
+        redirect('/moments');
+    }
     async function create(formData: FormData) {
         'use server';
 
