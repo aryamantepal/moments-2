@@ -1,29 +1,18 @@
-import { cookies } from 'next/headers';
 import { neon } from '@neondatabase/serverless';
-import { redirect } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import Navbar from '../components/navbar';
 import { Plus, MapPin, Calendar } from 'lucide-react';
+import { requireAuth } from '../lib/auth';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
 export default async function Moments() {
-    const cookieStore = await cookies();
-    const userId = cookieStore.get('user_id')?.value;
-
-    if (!userId) {
-        redirect('/sign-in');
-    }
+    const user = await requireAuth();
 
     const sql = neon(process.env.DATABASE_URL!);
 
-    // Get user info
-    const users = await sql`
-        SELECT name FROM users WHERE id = ${userId} LIMIT 1
-    `;
-    const user = users[0];
 
     const moments = await sql`
         SELECT
@@ -42,7 +31,7 @@ export default async function Moments() {
 
     return (
         <div className="min-h-screen bg-linear-to-br from-purple-50 via-pink-50 to-blue-50">
-            <Navbar userName={user.name} currentPage="moments" />
+            <Navbar userName={user.username} currentPage="moments" />
 
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="flex items-center justify-between mb-8">
@@ -140,7 +129,7 @@ export default async function Moments() {
                             </p>
                             <Link
                                 href="/moments/new"
-                                className="inline-block px-6 py-3 bg-linear`-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all"
+                                className="inline-block px-6 py-3 bg-linear-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all"
                             >
                                 Create First Moment
                             </Link>
