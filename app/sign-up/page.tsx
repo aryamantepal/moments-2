@@ -4,15 +4,10 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import { Sparkles, Mail, Lock, User } from 'lucide-react';
+import { redirectIfAuthenticated } from '../lib/auth';
 
 export default async function Page() {
-
-    const cookieStore = await cookies();
-    const userId = cookieStore.get('user_id');
-
-    if (userId) {
-        redirect('/moments');
-    }
+    await redirectIfAuthenticated();
     async function create(formData: FormData) {
         'use server';
 
