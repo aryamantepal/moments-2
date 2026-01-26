@@ -5,7 +5,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import Navbar from '../../components/navbar';
 import Link from 'next/link';
-import { MapPin, Calendar, User, ArrowLeft, Heart, MessageCircle, Share2 } from 'lucide-react';
+import { MapPin, Calendar, ArrowLeft, Heart, MessageCircle, Share2, Pencil, Trash2 } from 'lucide-react';
 
 export default async function MomentPage({ params }: { params: Promise<{ id: string }> }) {
     const cookieStore = await cookies();
@@ -44,6 +44,39 @@ export default async function MomentPage({ params }: { params: Promise<{ id: str
     const moment = moments[0];
     if (!moment) notFound();
 
+    const isAuthor = parseInt(userId) === moment.author_id;
+
+    async function deleteMoment(formData: FormData) {
+        'use server';
+
+        const momentID = formData.get('momentID') as string;
+        const cookieStore = await cookies();
+        const userId = cookieStore.get('user_id')?.value;
+
+        if (!userId) {
+            redirect('/sign-in');
+        }
+
+        const sql = neon(process.env.DATABASE_URL!);
+
+        // Verify ownership before deleting
+        const moments = await sql`
+            SELECT author_id FROM moments WHERE id = ${id}
+        `;
+
+        if (moments.length === 0 || moments[0].author_id !== parseInt(userId)) {
+            throw new Error('Unauthorized');
+        }
+
+        // Delete the moment
+        await sql`
+            DELETE FROM moments WHERE id = ${momentID}
+        `;
+
+        redirect('/moments');
+    }
+
+
     return (
         <div className="min-h-screen bg-linear-to-br from-purple-50 via-pink-50 to-blue-50">
             <Navbar userName={currentUser.name} />
@@ -57,6 +90,27 @@ export default async function MomentPage({ params }: { params: Promise<{ id: str
                     <span>Back to all moments</span>
                 </Link>
 
+                {isAuthor && (
+                    <div className="mb-6 flex items-center space-x-3">
+                        <Link
+                            href={`/moments/${id}/edit`}
+                            className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                        >
+                            <Pencil className="w-4 h-4" />
+                            <span>Edit Moment</span>
+                        </Link>
+                        <form action={deleteMoment}>
+                            <input type="hidden" name="momentID" value={id} />
+                            <button
+                                type="submit"
+                                className="flex items-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                            >
+                                <Trash2 className="w-4 h-4" />
+                                <span>Delete Moment</span>
+                            </button>
+                        </form>
+                    </div>
+                )}
                 <div className="grid lg:grid-cols-3 gap-8">
                     <div className="lg:col-span-2">
                         <div className="bg-white rounded-2xl overflow-hidden shadow-xl">
