@@ -20,14 +20,14 @@ export default async function Page() {
         `;
 
         if (users.length === 0) {
-            throw new Error('Invalid credentials');
+            return { error: 'Invalid credentials' };
         }
 
         const user = users[0];
 
         const isValid = await bcrypt.compare(password, user.password_hash);
         if (!isValid) {
-            throw new Error('Invalid credentials');
+            return { error: 'Invalid credentials' };
         }
 
         const cookieStore = await cookies();
