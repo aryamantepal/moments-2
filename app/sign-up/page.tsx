@@ -15,11 +15,11 @@ export default async function Page() {
         const email = formData.get('email') as string;
         const password = formData.get('password') as string;
         const hashedPassword = await bcrypt.hash(password, 10);
-        const username = formData.get('username') as string;
+        const name = formData.get('username') as string;
 
         await sql`
             INSERT INTO users (email, password_hash, name)
-            VALUES (${email}, ${hashedPassword}, ${username})
+            VALUES (${email}, ${hashedPassword}, ${name})
         `;
 
         const users = await sql`SELECT * FROM users WHERE email = ${email} LIMIT 1`;
