@@ -6,23 +6,16 @@ Moments is a minimalist web app where every photo tells a story through song. Ca
 
 ## What is Moments?
 
-Think **Instagram meets Spotify** — a feed of photo moments, each paired with a song that defines the vibe. No filters, no endless scrolling, just pure emotional snapshots backed by music.
+Think **Instagram meets Spotify** — a feed of photo moments, each paired with a song that defines the vibe. No filters, no endless scrolling, just pure emotional snapshots backed by music. ideally a really simple travel blog :p
 
 ## Features
 
-### MVP (Week 1)
 - 📸 **Upload photos** with drag-and-drop simplicity
 - 🎵 **Search and attach songs** from Spotify's catalog
 - ✏️ **Add captions** to give context to your moment
 - 🧭 **Browse a feed** of moments from friends
-- ❤️ **Like and react** to moments that resonate
 
-### Coming Soon
-- 🌐 **Explore feed** — discover moments from the community
-- 🏷️ **Mood filtering** — find moments by vibe (chill, hype, melancholic, etc.)
-- 🤖 **AI song suggestions** — get track recommendations based on your photo
-- 🔗 **Shareable story links** — send your moment to anyone, even non-users
-- 👥 **Friend system** — follow people whose taste you love
+(coming soon): map reference of everywhere you've been
 
 ## Tech Stack
 
@@ -130,17 +123,6 @@ model Like {
   @@unique([userId, momentId])
 }
 ```
-
-## Roadmap
-
-**Week 1** — MVP with upload, feed, and likes  
-**Week 2** — Friend system and user profiles  
-**Week 3** — Explore feed with mood filters  
-**Week 4** — AI song suggestions and shareable links  
-
-## Contributing
-
-This is a personal project for now, but feel free to fork and experiment. If you have ideas or find bugs, open an issue!
 
 ## License
 
