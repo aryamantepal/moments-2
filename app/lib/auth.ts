@@ -32,7 +32,7 @@ export async function getCurrentUser(): Promise<User | null> {
     if (!userId) return null;
 
     const users = await sql`
-        SELECT id, email, username, created_at 
+        SELECT id, email, name, created_at 
         FROM users 
         WHERE id = ${userId} 
         LIMIT 1
