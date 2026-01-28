@@ -73,56 +73,6 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) and start posting moments.
 
-## Project Structure
-
-```
-moments/
-├── app/
-│   ├── (auth)/          # Login/signup flows
-│   ├── (main)/          # Main app pages (feed, upload, profile)
-│   └── api/             # API routes (moments, upload, Spotify)
-├── components/          # Reusable UI components
-│   ├── ui/              # shadcn base components
-│   └── ...              # MomentCard, UploadForm, etc.
-├── lib/                 # Utilities and helpers
-│   ├── db.ts            # Prisma client
-│   └── spotify.ts       # Spotify API integration
-├── prisma/
-│   └── schema.prisma    # Database schema
-└── public/              # Static assets
-```
-
-## Database Schema
-
-```prisma
-model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  moments   Moment[]
-  likes     Like[]
-}
-
-model Moment {
-  id         String   @id @default(cuid())
-  userId     String
-  imageUrl   String
-  songId     String   // Spotify track ID
-  songName   String
-  artistName String
-  caption    String?
-  likes      Like[]
-  createdAt  DateTime @default(now())
-}
-
-model Like {
-  id       String @id @default(cuid())
-  userId   String
-  momentId String
-  
-  @@unique([userId, momentId])
-}
-```
 
 ## License
 
