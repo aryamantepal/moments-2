@@ -8,11 +8,16 @@ import { requireAuth } from '../lib/auth';
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
-export default async function Moments() {
+export default async function Moments({
+    searchParams
+}: {
+    searchParams: Promise<{ cursor?: string }>
+}) {
     const user = await requireAuth();
+    const { cursor } = await searchParams;
+    const pageSize = 12;
 
     const sql = neon(process.env.DATABASE_URL!);
-
 
     const moments = await sql`
         SELECT
@@ -26,8 +31,14 @@ export default async function Moments() {
             users.email AS author_email
         FROM moments
         JOIN users ON users.id = moments.author_id
+        WHERE ${cursor ? sql`moments.created_at < ${cursor}` : sql`TRUE`}
         ORDER BY moments.created_at DESC
+        LIMIT ${pageSize + 1}
     `;
+
+    const hasMore = moments.length > pageSize;
+    const displayMoments = hasMore ? moments.slice(0, pageSize) : moments;
+    const nextCursor = hasMore ? moments[pageSize].created_at : null;
 
     return (
         <div className="min-h-screen bg-linear-to-br from-purple-50 via-pink-50 to-blue-50">
@@ -52,69 +63,82 @@ export default async function Moments() {
                     </Link>
                 </div>
 
-                {moments.length > 0 ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {moments.map((moment) => (
-                            <Link
-                                key={moment.id}
-                                href={`/moments/${moment.id}`}
-                                className="group block"
-                            >
-                                <div className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                                    <div className="relative aspect-square overflow-hidden bg-gray-100">
-                                        <Image
-                                            src={moment.image_url}
-                                            alt={moment.caption || 'Moment'}
-                                            fill
-                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                            className="object-cover transition-transform duration-500 group-hover:scale-110"
-                                        />
-                                        <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                            <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                                                {moment.caption && (
-                                                    <p className="font-semibold text-lg mb-2 line-clamp-2">
-                                                        {moment.caption}
-                                                    </p>
-                                                )}
-                                                {moment.location && (
-                                                    <div className="flex items-center space-x-1 text-sm text-white/90">
-                                                        <MapPin className="w-3 h-3" />
-                                                        <span>{moment.location}</span>
-                                                    </div>
-                                                )}
+                {displayMoments.length > 0 ? (
+                    <>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {displayMoments.map((moment) => (
+                                <Link
+                                    key={moment.id}
+                                    href={`/moments/${moment.id}`}
+                                    className="group block"
+                                >
+                                    <div className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                                        <div className="relative aspect-square overflow-hidden bg-gray-100">
+                                            <Image
+                                                src={moment.image_url}
+                                                alt={moment.caption || 'Moment'}
+                                                fill
+                                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                                className="object-cover transition-transform duration-500 group-hover:scale-110"
+                                            />
+                                            <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                                <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                                                    {moment.caption && (
+                                                        <p className="font-semibold text-lg mb-2 line-clamp-2">
+                                                            {moment.caption}
+                                                        </p>
+                                                    )}
+                                                    {moment.location && (
+                                                        <div className="flex items-center space-x-1 text-sm text-white/90">
+                                                            <MapPin className="w-3 h-3" />
+                                                            <span>{moment.location}</span>
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div className="p-4">
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center space-x-2">
-                                                <div className="w-8 h-8 bg-linear-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
-                                                    <span className="text-white font-semibold text-xs">
-                                                        {moment.author_name?.charAt(0).toUpperCase() || moment.author_email.charAt(0).toUpperCase()}
+                                        <div className="p-4">
+                                            <div className="flex items-center justify-between">
+                                                <div className="flex items-center space-x-2">
+                                                    <div className="w-8 h-8 bg-linear-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                                                        <span className="text-white font-semibold text-xs">
+                                                            {moment.author_name?.charAt(0).toUpperCase() || moment.author_email.charAt(0).toUpperCase()}
+                                                        </span>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-sm font-medium text-gray-900">
+                                                            {moment.author_name || moment.author_email}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center space-x-1 text-xs text-gray-500">
+                                                    <Calendar className="w-3 h-3" />
+                                                    <span>
+                                                        {new Date(moment.created_at).toLocaleDateString('en-US', {
+                                                            month: 'short',
+                                                            day: 'numeric'
+                                                        })}
                                                     </span>
                                                 </div>
-                                                <div>
-                                                    <p className="text-sm font-medium text-gray-900">
-                                                        {moment.author_name || moment.author_email}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div className="flex items-center space-x-1 text-xs text-gray-500">
-                                                <Calendar className="w-3 h-3" />
-                                                <span>
-                                                    {new Date(moment.created_at).toLocaleDateString('en-US', {
-                                                        month: 'short',
-                                                        day: 'numeric'
-                                                    })}
-                                                </span>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </Link>
-                        ))}
-                    </div>
+                                </Link>
+                            ))}
+                        </div>
+
+                        {hasMore && (
+                            <div className="mt-12 flex justify-center">
+                                <Link
+                                    href={`/moments?cursor=${nextCursor}`}
+                                    className="px-8 py-3 bg-white text-purple-600 border-2 border-purple-600 rounded-full font-semibold hover:bg-purple-600 hover:text-white transition-all shadow-md hover:shadow-lg"
+                                >
+                                    Load More Moments
+                                </Link>
+                            </div>
+                        )}
+                    </>
                 ) : (
                     <div className="bg-white rounded-2xl p-12 text-center border-2 border-dashed border-gray-200">
                         <div className="max-w-md mx-auto">
