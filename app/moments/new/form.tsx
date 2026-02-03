@@ -16,7 +16,7 @@ export default function NewMomentForm() {
             )}
 
             <div>
-                <label htmlFor="image" className="flex items-center space-x-2 text-sm font-medium text-gray-700 mb-3">
+                <label htmlFor="image" className="flex items-center space-x-2 text-sm font-semibold text-gray-900 mb-3">
                     <ImageIcon className="w-4 h-4 text-black" />
                     <span>Image *</span>
                 </label>
@@ -41,13 +41,13 @@ export default function NewMomentForm() {
                     />
                     <p id="file-label" className="mt-2 text-sm font-medium text-black"></p>
                 </div>
-                <p className="mt-2 text-xs text-gray-500">
+                <p className="mt-2 text-xs text-gray-600">
                     Upload a photo to share with the community
                 </p>
             </div>
 
             <div>
-                <label htmlFor="caption" className="flex items-center space-x-2 text-sm font-medium text-gray-700 mb-3">
+                <label htmlFor="caption" className="flex items-center space-x-2 text-sm font-semibold text-gray-900 mb-3">
                     <Type className="w-4 h-4 text-black" />
                     <span>Caption</span>
                 </label>
@@ -56,15 +56,15 @@ export default function NewMomentForm() {
                     name="caption"
                     placeholder="What's this moment about? Share your story..."
                     rows={4}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-all outline-none resize-none bg-gray-50 text-black"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-all outline-none resize-none bg-gray-50 text-black placeholder:text-gray-500"
                 />
-                <p className="mt-2 text-xs text-gray-500">
+                <p className="mt-2 text-xs text-gray-600">
                     Optional - Add context to your moment
                 </p>
             </div>
 
             <div>
-                <label htmlFor="location" className="flex items-center space-x-2 text-sm font-medium text-gray-700 mb-3">
+                <label htmlFor="location" className="flex items-center space-x-2 text-sm font-semibold text-gray-900 mb-3">
                     <MapPin className="w-4 h-4 text-black" />
                     <span>Location</span>
                 </label>
@@ -73,9 +73,9 @@ export default function NewMomentForm() {
                     id="location"
                     name="location"
                     placeholder="Where was this taken?"
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-all outline-none bg-gray-50 text-black"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-all outline-none bg-gray-50 text-black placeholder:text-gray-500"
                 />
-                <p className="mt-2 text-xs text-gray-500">
+                <p className="mt-2 text-xs text-gray-600">
                     Optional - Add a location to your moment
                 </p>
             </div>

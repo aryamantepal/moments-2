@@ -27,7 +27,7 @@ export default async function Page() {
             <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <Link
                     href="/moments"
-                    className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors"
+                    className="inline-flex items-center space-x-2 text-gray-700 hover:text-gray-900 mb-6 transition-colors"
                 >
                     <ArrowLeft className="w-4 h-4" />
                     <span>Back to moments</span>
@@ -37,7 +37,7 @@ export default async function Page() {
                     <h1 className="text-4xl font-bold text-gray-900 mb-2">
                         Create New Moment
                     </h1>
-                    <p className="text-gray-600 text-lg">
+                    <p className="text-gray-700 text-lg">
                         Share a special memory with your community
                     </p>
                 </div>
@@ -48,7 +48,7 @@ export default async function Page() {
 
                 <div className="mt-8 bg-white rounded-2xl p-6 border border-gray-200">
                     <h3 className="font-medium text-black mb-3">Tips for great moments:</h3>
-                    <ul className="space-y-2 text-sm text-gray-600">
+                    <ul className="space-y-2 text-sm text-gray-700">
                         <li className="flex items-start space-x-2">
                             <span className="text-black mt-0.5">•</span>
                             <span>Choose clear, well-lit photos that capture the essence of the moment</span>

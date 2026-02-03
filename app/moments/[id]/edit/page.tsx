@@ -76,7 +76,7 @@ export default async function EditMomentPage({ params }: { params: Promise<{ id:
             <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <Link
                     href={`/moments/${id}`}
-                    className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors"
+                    className="inline-flex items-center space-x-2 text-gray-700 hover:text-gray-900 mb-6 transition-colors"
                 >
                     <ArrowLeft className="w-4 h-4" />
                     <span>Back to moment</span>
@@ -87,7 +87,7 @@ export default async function EditMomentPage({ params }: { params: Promise<{ id:
 
                     <form action={updateMoment} className="space-y-6">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label className="block text-sm font-semibold text-gray-900 mb-2">
                                 Caption
                             </label>
                             <textarea
@@ -95,12 +95,12 @@ export default async function EditMomentPage({ params }: { params: Promise<{ id:
                                 defaultValue={moment.caption || ''}
                                 rows={4}
                                 placeholder="Share your thoughts about this moment..."
-                                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-all outline-none resize-none bg-gray-50"
+                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-all outline-none resize-none bg-gray-50 text-gray-900 placeholder:text-gray-500"
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label className="block text-sm font-semibold text-gray-900 mb-2">
                                 Location
                             </label>
                             <input
@@ -108,7 +108,7 @@ export default async function EditMomentPage({ params }: { params: Promise<{ id:
                                 name="location"
                                 defaultValue={moment.location || ''}
                                 placeholder="Where was this moment captured?"
-                                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-all outline-none bg-gray-50"
+                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-all outline-none bg-gray-50 text-gray-900 placeholder:text-gray-500"
                             />
                         </div>
 
@@ -122,7 +122,7 @@ export default async function EditMomentPage({ params }: { params: Promise<{ id:
                             </button>
                             <Link
                                 href={`/moments/${id}`}
-                                className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
+                                className="px-6 py-3 border border-gray-300 text-gray-900 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
                             >
                                 Cancel
                             </Link>
