@@ -70,7 +70,7 @@ export default async function EditMomentPage({ params }: { params: Promise<{ id:
     }
 
     return (
-        <div className="min-h-screen bg-linear-to-br from-purple-50 via-pink-50 to-blue-50">
+        <div className="min-h-screen bg-gray-50">
             <Navbar userName={currentUser.name} />
 
             <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -95,7 +95,7 @@ export default async function EditMomentPage({ params }: { params: Promise<{ id:
                                 defaultValue={moment.caption || ''}
                                 rows={4}
                                 placeholder="Share your thoughts about this moment..."
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all outline-none resize-none"
+                                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-all outline-none resize-none bg-gray-50"
                             />
                         </div>
 
@@ -108,14 +108,14 @@ export default async function EditMomentPage({ params }: { params: Promise<{ id:
                                 name="location"
                                 defaultValue={moment.location || ''}
                                 placeholder="Where was this moment captured?"
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all outline-none"
+                                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-all outline-none bg-gray-50"
                             />
                         </div>
 
                         <div className="flex items-center space-x-4">
                             <button
                                 type="submit"
-                                className="flex items-center space-x-2 px-6 py-3 bg-linear-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all"
+                                className="flex items-center space-x-2 px-6 py-3 bg-black text-white rounded-lg font-medium hover:bg-gray-900 transition-all"
                             >
                                 <Save className="w-5 h-5" />
                                 <span>Save Changes</span>

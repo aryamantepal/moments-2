@@ -78,7 +78,7 @@ export default async function MomentPage({ params }: { params: Promise<{ id: str
 
 
     return (
-        <div className="min-h-screen bg-linear-to-br from-purple-50 via-pink-50 to-blue-50">
+        <div className="min-h-screen bg-gray-50">
             <Navbar userName={currentUser.name} />
 
             <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -94,7 +94,7 @@ export default async function MomentPage({ params }: { params: Promise<{ id: str
                     <div className="mb-6 flex items-center space-x-3">
                         <Link
                             href={`/moments/${id}/edit`}
-                            className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                            className="flex items-center space-x-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-900 transition-colors"
                         >
                             <Pencil className="w-4 h-4" />
                             <span>Edit Moment</span>
@@ -128,16 +128,16 @@ export default async function MomentPage({ params }: { params: Promise<{ id: str
                             <div className="p-6 border-t border-gray-100">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center space-x-4">
-                                        <button className="flex items-center space-x-2 text-gray-600 hover:text-purple-600 transition-colors">
+                                        <button className="flex items-center space-x-2 text-gray-600 hover:text-black transition-colors">
                                             <Heart className="w-5 h-5" />
                                             <span className="text-sm font-medium">Like</span>
                                         </button>
-                                        <button className="flex items-center space-x-2 text-gray-600 hover:text-purple-600 transition-colors">
+                                        <button className="flex items-center space-x-2 text-gray-600 hover:text-black transition-colors">
                                             <MessageCircle className="w-5 h-5" />
                                             <span className="text-sm font-medium">Comment</span>
                                         </button>
                                     </div>
-                                    <button className="flex items-center space-x-2 text-gray-600 hover:text-purple-600 transition-colors">
+                                    <button className="flex items-center space-x-2 text-gray-600 hover:text-black transition-colors">
                                         <Share2 className="w-5 h-5" />
                                         <span className="text-sm font-medium">Share</span>
                                     </button>
@@ -153,8 +153,8 @@ export default async function MomentPage({ params }: { params: Promise<{ id: str
                                     Posted By
                                 </h3>
                                 <div className="flex items-center space-x-3">
-                                    <div className="w-12 h-12 bg-linear-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
-                                        <span className="text-white font-semibold text-lg">
+                                    <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center">
+                                        <span className="text-white font-medium text-lg">
                                             {moment.author_name?.charAt(0).toUpperCase() || moment.author_email.charAt(0).toUpperCase()}
                                         </span>
                                     </div>
@@ -186,7 +186,7 @@ export default async function MomentPage({ params }: { params: Promise<{ id: str
                                         Location
                                     </h3>
                                     <div className="flex items-center space-x-2 text-gray-700">
-                                        <MapPin className="w-5 h-5 text-purple-600" />
+                                        <MapPin className="w-5 h-5 text-black" />
                                         <span className="text-base">{moment.location}</span>
                                     </div>
                                 </div>
@@ -197,7 +197,7 @@ export default async function MomentPage({ params }: { params: Promise<{ id: str
                                     Date
                                 </h3>
                                 <div className="flex items-center space-x-2 text-gray-700">
-                                    <Calendar className="w-5 h-5 text-purple-600" />
+                                    <Calendar className="w-5 h-5 text-black" />
                                     <span className="text-base">
                                         {new Date(moment.created_at).toLocaleDateString('en-US', {
                                             weekday: 'long',
