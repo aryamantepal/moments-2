@@ -30,7 +30,7 @@ export default function SignInForm() {
                         type="email"
                         placeholder="you@example.com"
                         required
-                        className='w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-all outline-none bg-gray-50'
+                        className='w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-all outline-none bg-gray-50 text-black placeholder:text-gray-400'
                     />
                 </div>
             </div>
@@ -48,7 +48,7 @@ export default function SignInForm() {
                         type="password"
                         placeholder="••••••••"
                         required
-                        className='w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-all outline-none bg-gray-50'
+                        className='w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-all outline-none bg-gray-50 text-black placeholder:text-gray-400'
                     />
                 </div>
             </div>
