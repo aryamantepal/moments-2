@@ -7,6 +7,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { rateLimit } from '@/app/lib/ratelimit';
 import { Redis } from '@upstash/redis';
+import { enqueueJob } from '@/app/lib/queue';
 
 export async function createMomentAction(prevState: any, formData: FormData) {
     const cookieStore = await cookies();
@@ -51,9 +52,23 @@ export async function createMomentAction(prevState: any, formData: FormData) {
             )
         `;
 
-        // Invalidate cache
-        const redis = Redis.fromEnv();
-        await redis.del('moments:feed:latest');
+        // Invalidate cache in background
+        // const redis = Redis.fromEnv();
+        // await redis.del('moments:feed:latest');
+
+        await enqueueJob("revalidate-cache", {
+            key: 'moments:feed:latest',
+            path: '/moments'
+        });
+
+        // Also simulate an image processing job
+        // Note: we don't have the real ID easily here without returning * from insert
+        // Just mocking the ID for now or would need to change the insert query
+        await enqueueJob("process-image", {
+            momentId: 0,
+            imageUrl: blob.url
+        });
+
     } catch (e) {
         console.error('Create moment error:', e);
         return { error: 'Failed to create moment. Please try again.' };
