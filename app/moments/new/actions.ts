@@ -8,72 +8,96 @@ import { revalidatePath } from "next/cache";
 import { rateLimit } from '@/app/lib/ratelimit';
 import { Redis } from '@upstash/redis';
 import { enqueueJob } from '@/app/lib/queue';
+import crypto from 'node:crypto';
+
+const redis = Redis.fromEnv();
 
 export async function createMomentAction(prevState: any, formData: FormData) {
-    const cookieStore = await cookies();
-    const userId = cookieStore.get('user_id')?.value;
-
-    if (!userId) {
-        return { error: 'Unauthorized' };
-    }
-
-    // Rate limiting
-    const ip = (await headers()).get("x-forwarded-for") ?? "127.0.0.1";
-    // Rate limit by user ID if logged in, else IP
-    const { success } = await rateLimit.createMoment.limit(userId ?? ip);
-
-    if (!success) {
-        return { error: 'You are posting too fast. Please try again later.' };
-    }
-
-    const caption = (formData.get("caption") as string) || null;
-    const location = (formData.get("location") as string) || null;
-    const image = formData.get("image") as File;
-
-    if (!image || image.size === 0) {
-        return { error: 'Image is required' };
-    }
+    console.log("[createMomentAction] Action started");
 
     try {
-        const blob = await put(
-            `moments/${crypto.randomUUID()}-${image.name}`,
-            image,
-            { access: 'public' }
-        );
+        const cookieStore = await cookies();
+        const userId = cookieStore.get('user_id')?.value;
+
+        if (!userId) {
+            console.log("[createMomentAction] Unauthorized");
+            return { error: 'Unauthorized' };
+        }
+
+        // Rate limiting
+        const ip = (await headers()).get("x-forwarded-for") ?? "127.0.0.1";
+        console.log("[createMomentAction] Rate limiting for user:", userId);
+        const { success } = await rateLimit.createMoment.limit(userId ?? ip);
+
+        if (!success) {
+            console.log("[createMomentAction] Rate limited");
+            return { error: 'You are posting too fast. Please try again later.' };
+        }
+
+        const caption = (formData.get("caption") as string) || null;
+        const location = (formData.get("location") as string) || null;
+        const imageFiles = formData.getAll("image") as File[];
+
+        console.log(`[createMomentAction] Processing ${imageFiles.length} images`);
+
+        if (!imageFiles || imageFiles.length === 0 || (imageFiles[0] instanceof File && imageFiles[0].size === 0)) {
+            return { error: 'At least one image is required' };
+        }
+
+        const uploadPromises = imageFiles.map(file => {
+            const fileName = file.name || 'unnamed-file';
+            return put(`moments/${crypto.randomUUID()}-${fileName}`, file, { access: 'public' });
+        });
+
+        const blobs = await Promise.all(uploadPromises);
+        const imageUrls = blobs.map(b => b.url);
+        console.log("[createMomentAction] Images uploaded:", imageUrls.length);
 
         const sql = neon(process.env.DATABASE_URL!);
         await sql`
-            INSERT INTO moments (image_url, caption, location, author_id)
+            INSERT INTO moments (image_url, images, caption, location, author_id)
             VALUES (
-                ${blob.url},
+                ${imageUrls[0]},
+                ${JSON.stringify(imageUrls)}::jsonb,
                 ${caption},
                 ${location},
                 ${Number(userId)}
             )
         `;
+        console.log("[createMomentAction] Database record created");
 
-        // Invalidate cache in background
-        // const redis = Redis.fromEnv();
-        // await redis.del('moments:feed:latest');
+        // Failsafe: Clear Redis cache synchronously so the feed updates immediately
+        // even if the background job fails or is delayed.
+        try {
+            await redis.del('moments:feed:latest');
+            console.log("[createMomentAction] Cache cleared synchronously");
+        } catch (redisErr) {
+            console.error("[createMomentAction] Sync cache clear failed:", redisErr);
+        }
 
-        await enqueueJob("revalidate-cache", {
-            key: 'moments:feed:latest',
-            path: '/moments'
-        });
+        try {
+            await enqueueJob("revalidate-cache", {
+                key: 'moments:feed:latest',
+                path: '/moments'
+            });
 
-        // Also simulate an image processing job
-        // Note: we don't have the real ID easily here without returning * from insert
-        // Just mocking the ID for now or would need to change the insert query
-        await enqueueJob("process-image", {
-            momentId: 0,
-            imageUrl: blob.url
-        });
+            await enqueueJob("process-image", {
+                momentId: 0,
+                imageUrl: imageUrls[0]
+            });
+            console.log("[createMomentAction] Jobs enqueued");
+        } catch (jobErr) {
+            console.error("[createMomentAction] Job enqueue failed (non-blocking):", jobErr);
+        }
 
-    } catch (e) {
-        console.error('Create moment error:', e);
-        return { error: 'Failed to create moment. Please try again.' };
+        revalidatePath('/moments');
+        console.log("[createMomentAction] Path revalidated, redirecting...");
+
+    } catch (e: any) {
+        console.error('[createMomentAction] CRITICAL ERROR:', e);
+        return { error: `Server error: ${e.message || 'Unknown issue'}` };
     }
 
-    revalidatePath('/moments');
+    // Redirect must be called outside try-catch to work correctly in some Next.js environments
     redirect('/moments');
 }

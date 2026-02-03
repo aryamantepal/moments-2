@@ -64,6 +64,13 @@ export default async function Moments({
                                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                                 className="object-cover transition-transform duration-500 group-hover:scale-110"
                                             />
+                                            {moment.images && moment.images.length > 1 && (
+                                                <div className="absolute top-3 right-3 bg-black/50 backdrop-blur-md p-1.5 rounded-lg text-white shadow-lg z-10">
+                                                    <div className="flex items-center space-x-1">
+                                                        <span className="text-[10px] font-bold uppercase tracking-wider pl-1">Photo Dump</span>
+                                                    </div>
+                                                </div>
+                                            )}
                                             <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                                 <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
                                                     {moment.caption && (

@@ -41,6 +41,7 @@ async function fetchFromDb(cursor?: string) {
         SELECT
             moments.id,
             moments.image_url,
+            moments.images,
             moments.caption,
             moments.location,
             moments.created_at,

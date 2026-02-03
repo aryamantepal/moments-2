@@ -26,9 +26,20 @@ export default function NewMomentForm() {
                         id="image"
                         name="image"
                         accept="image/*"
+                        multiple
                         required
+                        onChange={(e) => {
+                            const files = e.target.files;
+                            if (files && files.length > 0) {
+                                // Basic preview logic could go here, or just let users see file count
+                                const count = files.length;
+                                const label = document.getElementById('file-label');
+                                if (label) label.innerText = `${count} image${count > 1 ? 's' : ''} selected`;
+                            }
+                        }}
                         className="w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg focus:border-black focus:ring-0 transition-all outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-black hover:file:bg-gray-200 cursor-pointer"
                     />
+                    <p id="file-label" className="mt-2 text-sm font-medium text-black"></p>
                 </div>
                 <p className="mt-2 text-xs text-gray-500">
                     Upload a photo to share with the community

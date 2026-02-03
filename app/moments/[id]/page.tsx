@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation';
 import Navbar from '../../components/navbar';
 import Link from 'next/link';
 import { MapPin, Calendar, ArrowLeft, Heart, MessageCircle, Share2, Pencil, Trash2 } from 'lucide-react';
+import PhotoDumpViewer from '../../components/PhotoDumpViewer';
 
 export default async function MomentPage({ params }: { params: Promise<{ id: string }> }) {
     const cookieStore = await cookies();
@@ -29,6 +30,7 @@ export default async function MomentPage({ params }: { params: Promise<{ id: str
         SELECT
             moments.id,
             moments.image_url,
+            moments.images,
             moments.caption,
             moments.location,
             moments.created_at,
@@ -45,6 +47,15 @@ export default async function MomentPage({ params }: { params: Promise<{ id: str
     if (!moment) notFound();
 
     const isAuthor = parseInt(userId) === moment.author_id;
+
+    // Handle both new array format and old single string format
+    // Although we backfilled, good to be safe or if type is loose
+    let imageList: string[] = [];
+    if (moment.images && Array.isArray(moment.images)) {
+        imageList = moment.images;
+    } else if (moment.image_url) {
+        imageList = [moment.image_url];
+    }
 
     async function deleteMoment(formData: FormData) {
         'use server';
@@ -113,35 +124,14 @@ export default async function MomentPage({ params }: { params: Promise<{ id: str
                 )}
                 <div className="grid lg:grid-cols-3 gap-8">
                     <div className="lg:col-span-2">
-                        <div className="bg-white rounded-2xl overflow-hidden shadow-xl">
-                            <div className="relative aspect-square bg-gray-100">
-                                <Image
-                                    src={moment.image_url}
-                                    alt={moment.caption || 'Moment'}
-                                    fill
-                                    className="object-cover"
-                                    priority
-                                    sizes="(max-width: 768px) 100vw, 66vw"
-                                />
-                            </div>
+                        <div className="bg-white rounded-2xl p-4 shadow-xl">
+                            <PhotoDumpViewer images={imageList} />
+                        </div>
 
-                            <div className="p-6 border-t border-gray-100">
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center space-x-4">
-                                        <button className="flex items-center space-x-2 text-gray-600 hover:text-black transition-colors">
-                                            <Heart className="w-5 h-5" />
-                                            <span className="text-sm font-medium">Like</span>
-                                        </button>
-                                        <button className="flex items-center space-x-2 text-gray-600 hover:text-black transition-colors">
-                                            <MessageCircle className="w-5 h-5" />
-                                            <span className="text-sm font-medium">Comment</span>
-                                        </button>
-                                    </div>
-                                    <button className="flex items-center space-x-2 text-gray-600 hover:text-black transition-colors">
-                                        <Share2 className="w-5 h-5" />
-                                        <span className="text-sm font-medium">Share</span>
-                                    </button>
-                                </div>
+                        <div className="p-6 border-t border-gray-100 hidden">
+                            {/* Hidden actions for now as they were just mockup buttons */}
+                            <div className="flex items-center justify-between">
+                                {/* ... existing buttons ... */}
                             </div>
                         </div>
                     </div>
