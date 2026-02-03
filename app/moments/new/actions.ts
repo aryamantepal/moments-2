@@ -6,6 +6,7 @@ import { cookies, headers } from 'next/headers';
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { rateLimit } from '@/app/lib/ratelimit';
+import { Redis } from '@upstash/redis';
 
 export async function createMomentAction(prevState: any, formData: FormData) {
     const cookieStore = await cookies();
@@ -49,6 +50,10 @@ export async function createMomentAction(prevState: any, formData: FormData) {
                 ${Number(userId)}
             )
         `;
+
+        // Invalidate cache
+        const redis = Redis.fromEnv();
+        await redis.del('moments:feed:latest');
     } catch (e) {
         console.error('Create moment error:', e);
         return { error: 'Failed to create moment. Please try again.' };

@@ -1,4 +1,4 @@
-import { neon } from '@neondatabase/serverless';
+import { getMoments } from '../lib/data';
 import Image from 'next/image';
 import Link from 'next/link';
 import Navbar from '../components/navbar';
@@ -17,24 +17,7 @@ export default async function Moments({
     const { cursor } = await searchParams;
     const pageSize = 12;
 
-    const sql = neon(process.env.DATABASE_URL!);
-
-    const moments = await sql`
-        SELECT
-            moments.id,
-            moments.image_url,
-            moments.caption,
-            moments.location,
-            moments.created_at,
-            users.id AS author_id,
-            users.name AS author_name,
-            users.email AS author_email
-        FROM moments
-        JOIN users ON users.id = moments.author_id
-        WHERE ${cursor ? sql`moments.created_at < ${cursor}` : sql`TRUE`}
-        ORDER BY moments.created_at DESC
-        LIMIT ${pageSize + 1}
-    `;
+    const moments = await getMoments(cursor);
 
     const hasMore = moments.length > pageSize;
     const displayMoments = hasMore ? moments.slice(0, pageSize) : moments;
