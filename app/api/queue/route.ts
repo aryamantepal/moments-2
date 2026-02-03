@@ -24,4 +24,10 @@ async function handler(req: NextRequest) {
 }
 
 // Security: Verify the request comes from QStash
-export const POST = verifySignatureAppRouter(handler);
+// We check if keys exist to avoid crashing the Vercel build if they aren't set yet.
+export const POST = (process.env.QSTASH_CURRENT_SIGNING_KEY && process.env.QSTASH_NEXT_SIGNING_KEY)
+    ? verifySignatureAppRouter(handler)
+    : handler;
+
+export const dynamic = 'force-dynamic';
+

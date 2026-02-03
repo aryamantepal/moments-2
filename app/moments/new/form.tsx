@@ -56,7 +56,7 @@ export default function NewMomentForm() {
                     name="caption"
                     placeholder="What's this moment about? Share your story..."
                     rows={4}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-all outline-none resize-none bg-gray-50"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-all outline-none resize-none bg-gray-50 text-black"
                 />
                 <p className="mt-2 text-xs text-gray-500">
                     Optional - Add context to your moment
@@ -73,7 +73,7 @@ export default function NewMomentForm() {
                     id="location"
                     name="location"
                     placeholder="Where was this taken?"
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-all outline-none bg-gray-50"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-all outline-none bg-gray-50 text-black"
                 />
                 <p className="mt-2 text-xs text-gray-500">
                     Optional - Add a location to your moment
