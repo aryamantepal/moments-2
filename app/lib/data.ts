@@ -45,6 +45,8 @@ async function fetchFromDb(cursor?: string) {
             moments.caption,
             moments.location,
             moments.created_at,
+            moments.latitude,
+            moments.longitude,
             users.id AS author_id,
             users.name AS author_name,
             users.email AS author_email

@@ -44,6 +44,31 @@ export async function createMomentAction(prevState: any, formData: FormData) {
             return { error: 'At least one image is required' };
         }
 
+        // Geocoding
+        let latitude: number | null = null;
+        let longitude: number | null = null;
+
+        if (location) {
+            try {
+                const geoResponse = await fetch(
+                    `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(location)}&format=json&limit=1`,
+                    {
+                        headers: {
+                            'User-Agent': 'MomentsApp/1.0'
+                        }
+                    }
+                );
+                const geoData = await geoResponse.json();
+                if (geoData && geoData.length > 0) {
+                    latitude = parseFloat(geoData[0].lat);
+                    longitude = parseFloat(geoData[0].lon);
+                    console.log(`[createMomentAction] Geocoded ${location} to ${latitude}, ${longitude}`);
+                }
+            } catch (geoErr) {
+                console.error("[createMomentAction] Geocoding failed:", geoErr);
+            }
+        }
+
         const uploadPromises = imageFiles.map(file => {
             const fileName = file.name || 'unnamed-file';
             return put(`moments/${crypto.randomUUID()}-${fileName}`, file, { access: 'public' });
@@ -55,13 +80,15 @@ export async function createMomentAction(prevState: any, formData: FormData) {
 
         const sql = neon(process.env.DATABASE_URL!);
         await sql`
-            INSERT INTO moments (image_url, images, caption, location, author_id)
+            INSERT INTO moments (image_url, images, caption, location, author_id, latitude, longitude)
             VALUES (
                 ${imageUrls[0]},
                 ${JSON.stringify(imageUrls)}::jsonb,
                 ${caption},
                 ${location},
-                ${Number(userId)}
+                ${Number(userId)},
+                ${latitude},
+                ${longitude}
             )
         `;
         console.log("[createMomentAction] Database record created");

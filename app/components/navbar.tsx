@@ -1,5 +1,6 @@
+
 import Link from 'next/link';
-import { Sparkles, LogOut, Home, Image } from 'lucide-react';
+import { Sparkles, LogOut, Home, Image as ImageIcon, Map as MapIcon } from 'lucide-react';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
@@ -38,32 +39,38 @@ export default function Navbar({ userName, currentPage }: NavbarProps) {
                             href="/moments/new"
                             className="flex items-center space-x-2 px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-black transition-all"
                         >
-                            <Image className="w-4 h-4" />
+                            <ImageIcon className="w-4 h-4" />
                             <span>New Moment</span>
                         </Link>
                     </div>
 
                     {/* User Menu */}
                     <div className="flex items-center space-x-4">
-                        {/* User Profile */}
+                        {/* User Profile / Map */}
                         {userName && (
-                            <div className="hidden sm:flex items-center space-x-3">
-                                <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
-                                    <span className="text-white font-medium text-sm">
+                            <Link
+                                href={`/${userName}`}
+                                className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-all ${currentPage === 'profile' ? 'bg-black text-white' : 'hover:bg-gray-100 text-gray-600 hover:text-black'
+                                    }`}
+                            >
+                                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentPage === 'profile' ? 'bg-white text-black' : 'bg-black text-white'
+                                    }`}>
+                                    <span className="font-medium text-sm">
                                         {userName.charAt(0).toUpperCase()}
                                     </span>
                                 </div>
-                                <div className="text-sm">
-                                    <p className="font-medium text-black">{userName}</p>
+                                <div className="text-sm hidden sm:block">
+                                    <p className="font-medium">{userName}</p>
                                 </div>
-                            </div>
+                                <MapIcon className="w-4 h-4 ml-1 opacity-60" />
+                            </Link>
                         )}
 
                         {/* Sign Out Button */}
                         <form action={signOut}>
                             <button
                                 type="submit"
-                                className="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all"
+                                className="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
                             >
                                 <LogOut className="w-4 h-4" />
                                 <span className="hidden sm:inline">Sign Out</span>

@@ -4,7 +4,8 @@ import { redirect } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import Navbar from '../components/navbar';
-import { Calendar, MapPin, Image as ImageIcon, ArrowLeft } from 'lucide-react';
+import { Calendar, MapPin, Image as ImageIcon, ArrowLeft, Map as MapIcon } from 'lucide-react';
+import MomentMapClient from '../components/MomentMapClient';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -50,6 +51,8 @@ export default async function UserProfile({ params }: { params: Promise<{ user: 
             moments.caption,
             moments.location,
             moments.created_at,
+            moments.latitude,
+            moments.longitude,
             users.id AS author_id,
             users.name AS author_name,
             users.email AS author_email
@@ -62,8 +65,8 @@ export default async function UserProfile({ params }: { params: Promise<{ user: 
     const isOwnProfile = currentUser.name === username;
 
     return (
-        <div className="min-h-screen bg-linear-to-br from-purple-50 via-pink-50 to-blue-50">
-            <Navbar userName={currentUser.name} />
+        <div className="min-h-screen bg-gray-50">
+            <Navbar userName={currentUser.name} currentPage="profile" />
 
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 {/* Back Button */}
@@ -79,7 +82,7 @@ export default async function UserProfile({ params }: { params: Promise<{ user: 
                 <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
                     <div className="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
                         {/* Avatar */}
-                        <div className="w-32 h-32 bg-linear-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg">
+                        <div className="w-32 h-32 bg-black rounded-full flex items-center justify-center shadow-lg">
                             <span className="text-white font-bold text-5xl">
                                 {username.charAt(0).toUpperCase()}
                             </span>
@@ -97,22 +100,22 @@ export default async function UserProfile({ params }: { params: Promise<{ user: 
                             {/* Stats */}
                             <div className="flex flex-wrap justify-center md:justify-start gap-6 mb-6">
                                 <div className="text-center">
-                                    <p className="text-3xl font-bold text-purple-600">
+                                    <p className="text-3xl font-bold text-black">
                                         {moments.length}
                                     </p>
-                                    <p className="text-sm text-gray-600">Moments</p>
+                                    <p className="text-sm text-gray-500 uppercase tracking-wider font-semibold text-[10px]">Moments</p>
                                 </div>
                                 <div className="text-center">
-                                    <p className="text-3xl font-bold text-pink-600">
+                                    <p className="text-3xl font-bold text-black">
                                         {moments.filter(m => m.location).length}
                                     </p>
-                                    <p className="text-sm text-gray-600">Locations</p>
+                                    <p className="text-sm text-gray-500 uppercase tracking-wider font-semibold text-[10px]">Locations</p>
                                 </div>
                                 <div className="text-center">
-                                    <p className="text-3xl font-bold text-blue-600">
+                                    <p className="text-3xl font-bold text-black">
                                         {new Date(profileUser.created_at).getFullYear()}
                                     </p>
-                                    <p className="text-sm text-gray-600">Joined</p>
+                                    <p className="text-sm text-gray-500 uppercase tracking-wider font-semibold text-[10px]">Joined</p>
                                 </div>
                             </div>
 
@@ -120,7 +123,7 @@ export default async function UserProfile({ params }: { params: Promise<{ user: 
                             {isOwnProfile && (
                                 <Link
                                     href="/moments/new"
-                                    className="inline-flex items-center space-x-2 px-6 py-3 bg-linear-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all"
+                                    className="inline-flex items-center space-x-2 px-6 py-3 bg-black text-white rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all"
                                 >
                                     <ImageIcon className="w-4 h-4" />
                                     <span>Add New Moment</span>
@@ -131,109 +134,47 @@ export default async function UserProfile({ params }: { params: Promise<{ user: 
                 </div>
 
                 {/* Moments Section */}
-                <div className="mb-6">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                        {isOwnProfile ? 'Your Moments' : `${username}'s Moments`}
-                    </h2>
-                    <p className="text-gray-600">
-                        {moments.length === 0
-                            ? isOwnProfile
-                                ? "You haven't shared any moments yet"
-                                : `${username} hasn't shared any moments yet`
-                            : `${moments.length} moment${moments.length === 1 ? '' : 's'} shared`
-                        }
-                    </p>
+                <div className="mb-6 flex items-center justify-between">
+                    <div>
+                        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                            {isOwnProfile ? 'Your Travel Map' : `${username}'s Travel Map`}
+                        </h2>
+                        <p className="text-gray-600">
+                            {moments.length === 0
+                                ? "No locations visited yet"
+                                : `Exploring ${moments.filter(m => m.location).length} location${moments.filter(m => m.location).length === 1 ? '' : 's'} across the globe`
+                            }
+                        </p>
+                    </div>
                 </div>
 
-                {/* Moments Grid */}
+                {/* Map View */}
                 {moments.length > 0 ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {moments.map((moment) => (
-                            <Link
-                                key={moment.id}
-                                href={`/moments/${moment.id}`}
-                                className="group block"
-                            >
-                                <div className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                                    {/* Image */}
-                                    <div className="relative aspect-square overflow-hidden bg-gray-100">
-                                        <Image
-                                            src={moment.image_url}
-                                            alt={moment.caption || 'Moment'}
-                                            fill
-                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                            className="object-cover transition-transform duration-500 group-hover:scale-110"
-                                        />
-
-                                        {/* Overlay on hover */}
-                                        <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                            <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                                                {moment.caption && (
-                                                    <p className="font-semibold text-lg mb-2 line-clamp-2">
-                                                        {moment.caption}
-                                                    </p>
-                                                )}
-                                                {moment.location && (
-                                                    <div className="flex items-center space-x-1 text-sm text-white/90">
-                                                        <MapPin className="w-3 h-3" />
-                                                        <span>{moment.location}</span>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Card Footer */}
-                                    <div className="p-4">
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center space-x-2">
-                                                {moment.caption ? (
-                                                    <p className="text-sm font-medium text-gray-900 line-clamp-1">
-                                                        {moment.caption}
-                                                    </p>
-                                                ) : (
-                                                    <p className="text-sm text-gray-500 italic">
-                                                        No caption
-                                                    </p>
-                                                )}
-                                            </div>
-                                            <div className="flex items-center space-x-1 text-xs text-gray-500">
-                                                <Calendar className="w-3 h-3" />
-                                                <span>
-                                                    {new Date(moment.created_at).toLocaleDateString('en-US', {
-                                                        month: 'short',
-                                                        day: 'numeric'
-                                                    })}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </Link>
-                        ))}
+                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
+                        <MomentMapClient moments={moments} />
                     </div>
                 ) : (
                     /* Empty State */
                     <div className="bg-white rounded-2xl p-12 text-center border-2 border-dashed border-gray-200">
                         <div className="max-w-md mx-auto">
-                            <div className="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <ImageIcon className="w-10 h-10 text-purple-600" />
+                            <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <MapIcon className="w-10 h-10 text-black" />
                             </div>
                             <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                                No Moments Yet
+                                No Travels Recorded
                             </h3>
                             <p className="text-gray-600 mb-6">
                                 {isOwnProfile
-                                    ? "Start sharing your memories by creating your first moment!"
-                                    : `${username} hasn't shared any moments yet. Check back later!`
+                                    ? "Start pinning your memories on the map by creating moments with locations!"
+                                    : `${username} hasn't pinned any locations yet.`
                                 }
                             </p>
                             {isOwnProfile && (
                                 <Link
                                     href="/moments/new"
-                                    className="inline-block px-6 py-3 bg-linear-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all"
+                                    className="inline-block px-6 py-3 bg-black text-white rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all"
                                 >
-                                    Create Your First Moment
+                                    Record Your First Trip
                                 </Link>
                             )}
                         </div>
