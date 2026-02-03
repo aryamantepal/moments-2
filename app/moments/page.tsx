@@ -41,7 +41,7 @@ export default async function Moments({
     const nextCursor = hasMore ? moments[pageSize].created_at : null;
 
     return (
-        <div className="min-h-screen bg-linear-to-br from-purple-50 via-pink-50 to-blue-50">
+        <div className="min-h-screen bg-gray-50">
             <Navbar userName={user.username} currentPage="moments" />
 
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -56,7 +56,7 @@ export default async function Moments({
                     </div>
                     <Link
                         href="/moments/new"
-                        className="flex items-center space-x-2 px-6 py-3 bg-linear-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all"
+                        className="flex items-center space-x-2 px-6 py-3 bg-black text-white rounded-full font-medium hover:bg-gray-900 transition-all"
                     >
                         <Plus className="w-5 h-5" />
                         <span className="hidden sm:inline">New Moment</span>
@@ -101,8 +101,8 @@ export default async function Moments({
                                         <div className="p-4">
                                             <div className="flex items-center justify-between">
                                                 <div className="flex items-center space-x-2">
-                                                    <div className="w-8 h-8 bg-linear-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
-                                                        <span className="text-white font-semibold text-xs">
+                                                    <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
+                                                        <span className="text-white font-medium text-xs">
                                                             {moment.author_name?.charAt(0).toUpperCase() || moment.author_email.charAt(0).toUpperCase()}
                                                         </span>
                                                     </div>
@@ -132,7 +132,7 @@ export default async function Moments({
                             <div className="mt-12 flex justify-center">
                                 <Link
                                     href={`/moments?cursor=${nextCursor}`}
-                                    className="px-8 py-3 bg-white text-purple-600 border-2 border-purple-600 rounded-full font-semibold hover:bg-purple-600 hover:text-white transition-all shadow-md hover:shadow-lg"
+                                    className="px-8 py-3 bg-white text-black border border-gray-200 rounded-full font-medium hover:bg-gray-50 transition-all"
                                 >
                                     Load More Moments
                                 </Link>
@@ -142,18 +142,18 @@ export default async function Moments({
                 ) : (
                     <div className="bg-white rounded-2xl p-12 text-center border-2 border-dashed border-gray-200">
                         <div className="max-w-md mx-auto">
-                            <div className="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <Plus className="w-10 h-10 text-purple-600" />
+                            <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <Plus className="w-10 h-10 text-black" />
                             </div>
-                            <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                            <h3 className="text-2xl font-bold text-black mb-2">
                                 No Moments Yet
                             </h3>
-                            <p className="text-gray-600 mb-6">
+                            <p className="text-gray-500 mb-6">
                                 Be the first to share a moment with the community!
                             </p>
                             <Link
                                 href="/moments/new"
-                                className="inline-block px-6 py-3 bg-linear-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all"
+                                className="inline-block px-6 py-3 bg-black text-white rounded-full font-medium hover:bg-gray-900 transition-all"
                             >
                                 Create First Moment
                             </Link>

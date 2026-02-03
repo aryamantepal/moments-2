@@ -29,7 +29,7 @@ export default function SignUpForm() {
                         name="email"
                         placeholder="you@example.com"
                         required
-                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all outline-none"
+                        className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-all outline-none bg-gray-50"
                     />
                 </div>
             </div>
@@ -47,7 +47,7 @@ export default function SignUpForm() {
                         name="username"
                         placeholder="johndoe"
                         required
-                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all outline-none"
+                        className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-all outline-none bg-gray-50"
                     />
                 </div>
             </div>
@@ -65,7 +65,7 @@ export default function SignUpForm() {
                         name="password"
                         placeholder="••••••••"
                         required
-                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all outline-none"
+                        className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-all outline-none bg-gray-50"
                     />
                 </div>
             </div>
@@ -73,15 +73,15 @@ export default function SignUpForm() {
             <button
                 type="submit"
                 disabled={isPending}
-                className="w-full mt-2 bg-linear-to-r from-purple-600 to-pink-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full mt-2 bg-black text-white py-3 rounded-lg font-medium hover:bg-gray-900 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
                 {isPending ? 'Creating Account...' : 'Create Account'}
             </button>
 
             <div className="text-center mt-4">
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-500">
                     Already have an account?{' '}
-                    <Link href="/sign-in" className="text-purple-600 font-semibold hover:text-purple-700 transition-colors">
+                    <Link href="/sign-in" className="text-black font-medium hover:underline transition-all">
                         Sign in
                     </Link>
                 </p>

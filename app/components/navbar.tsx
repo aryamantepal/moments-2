@@ -15,8 +15,8 @@ export default function Navbar({ userName, currentPage }: NavbarProps) {
                 <div className="flex justify-between items-center h-16">
                     {/* Logo */}
                     <Link href="/moments" className="flex items-center space-x-2 group">
-                        <Sparkles className="w-6 h-6 text-purple-600 group-hover:text-pink-600 transition-colors" />
-                        <span className="text-2xl font-bold bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                        <Sparkles className="w-5 h-5 text-black" />
+                        <span className="text-xl font-bold text-black tracking-tight">
                             Moments
                         </span>
                     </Link>
@@ -26,8 +26,8 @@ export default function Navbar({ userName, currentPage }: NavbarProps) {
                         <Link
                             href="/moments"
                             className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all ${currentPage === 'moments'
-                                ? 'bg-purple-50 text-purple-700 font-medium'
-                                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                                ? 'bg-black text-white font-medium'
+                                : 'text-gray-600 hover:bg-gray-100 hover:text-black'
                                 }`}
                         >
                             <Home className="w-4 h-4" />
@@ -36,7 +36,7 @@ export default function Navbar({ userName, currentPage }: NavbarProps) {
 
                         <Link
                             href="/moments/new"
-                            className="flex items-center space-x-2 px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all"
+                            className="flex items-center space-x-2 px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-black transition-all"
                         >
                             <Image className="w-4 h-4" />
                             <span>New Moment</span>
@@ -48,13 +48,13 @@ export default function Navbar({ userName, currentPage }: NavbarProps) {
                         {/* User Profile */}
                         {userName && (
                             <div className="hidden sm:flex items-center space-x-3">
-                                <div className="w-8 h-8 bg-linear-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
-                                    <span className="text-white font-semibold text-sm">
+                                <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
+                                    <span className="text-white font-medium text-sm">
                                         {userName.charAt(0).toUpperCase()}
                                     </span>
                                 </div>
                                 <div className="text-sm">
-                                    <p className="font-medium text-gray-900">{userName}</p>
+                                    <p className="font-medium text-black">{userName}</p>
                                 </div>
                             </div>
                         )}

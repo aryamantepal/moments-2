@@ -21,7 +21,7 @@ export default async function Page() {
     const user = users[0];
 
     return (
-        <div className="min-h-screen bg-linear-to-br from-purple-50 via-pink-50 to-blue-50">
+        <div className="min-h-screen bg-gray-50">
             <Navbar userName={user.name} />
 
             <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -46,19 +46,19 @@ export default async function Page() {
                     <NewMomentForm />
                 </div>
 
-                <div className="mt-8 bg-purple-50 rounded-2xl p-6 border border-purple-100">
-                    <h3 className="font-semibold text-purple-900 mb-3">Tips for great moments:</h3>
-                    <ul className="space-y-2 text-sm text-purple-800">
+                <div className="mt-8 bg-white rounded-2xl p-6 border border-gray-200">
+                    <h3 className="font-medium text-black mb-3">Tips for great moments:</h3>
+                    <ul className="space-y-2 text-sm text-gray-600">
                         <li className="flex items-start space-x-2">
-                            <span className="text-purple-600 mt-0.5">•</span>
+                            <span className="text-black mt-0.5">•</span>
                             <span>Choose clear, well-lit photos that capture the essence of the moment</span>
                         </li>
                         <li className="flex items-start space-x-2">
-                            <span className="text-purple-600 mt-0.5">•</span>
+                            <span className="text-black mt-0.5">•</span>
                             <span>Write authentic captions that tell the story behind the image</span>
                         </li>
                         <li className="flex items-start space-x-2">
-                            <span className="text-purple-600 mt-0.5">•</span>
+                            <span className="text-black mt-0.5">•</span>
                             <span>Add locations to help others discover beautiful places</span>
                         </li>
                     </ul>

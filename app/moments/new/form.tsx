@@ -16,8 +16,8 @@ export default function NewMomentForm() {
             )}
 
             <div>
-                <label htmlFor="image" className="flex items-center space-x-2 text-sm font-semibold text-gray-700 mb-3">
-                    <ImageIcon className="w-4 h-4 text-purple-600" />
+                <label htmlFor="image" className="flex items-center space-x-2 text-sm font-medium text-gray-700 mb-3">
+                    <ImageIcon className="w-4 h-4 text-black" />
                     <span>Image *</span>
                 </label>
                 <div className="relative">
@@ -27,7 +27,7 @@ export default function NewMomentForm() {
                         name="image"
                         accept="image/*"
                         required
-                        className="w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 cursor-pointer"
+                        className="w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg focus:border-black focus:ring-0 transition-all outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-black hover:file:bg-gray-200 cursor-pointer"
                     />
                 </div>
                 <p className="mt-2 text-xs text-gray-500">
@@ -36,8 +36,8 @@ export default function NewMomentForm() {
             </div>
 
             <div>
-                <label htmlFor="caption" className="flex items-center space-x-2 text-sm font-semibold text-gray-700 mb-3">
-                    <Type className="w-4 h-4 text-purple-600" />
+                <label htmlFor="caption" className="flex items-center space-x-2 text-sm font-medium text-gray-700 mb-3">
+                    <Type className="w-4 h-4 text-black" />
                     <span>Caption</span>
                 </label>
                 <textarea
@@ -45,7 +45,7 @@ export default function NewMomentForm() {
                     name="caption"
                     placeholder="What's this moment about? Share your story..."
                     rows={4}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all outline-none resize-none"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-all outline-none resize-none bg-gray-50"
                 />
                 <p className="mt-2 text-xs text-gray-500">
                     Optional - Add context to your moment
@@ -53,8 +53,8 @@ export default function NewMomentForm() {
             </div>
 
             <div>
-                <label htmlFor="location" className="flex items-center space-x-2 text-sm font-semibold text-gray-700 mb-3">
-                    <MapPin className="w-4 h-4 text-purple-600" />
+                <label htmlFor="location" className="flex items-center space-x-2 text-sm font-medium text-gray-700 mb-3">
+                    <MapPin className="w-4 h-4 text-black" />
                     <span>Location</span>
                 </label>
                 <input
@@ -62,7 +62,7 @@ export default function NewMomentForm() {
                     id="location"
                     name="location"
                     placeholder="Where was this taken?"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all outline-none"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-all outline-none bg-gray-50"
                 />
                 <p className="mt-2 text-xs text-gray-500">
                     Optional - Add a location to your moment
@@ -73,7 +73,7 @@ export default function NewMomentForm() {
                 <button
                     type="submit"
                     disabled={isPending}
-                    className="w-full flex items-center justify-center space-x-2 bg-linear-to-r from-purple-600 to-pink-600 text-white py-4 rounded-lg font-semibold hover:shadow-xl transform hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full flex items-center justify-center space-x-2 bg-black text-white py-4 rounded-lg font-medium hover:bg-gray-900 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     <Upload className="w-5 h-5" />
                     <span>{isPending ? 'Uploading...' : 'Upload Moment'}</span>
