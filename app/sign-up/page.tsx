@@ -2,9 +2,10 @@ import { neon } from '@neondatabase/serverless';
 import * as bcrypt from 'bcrypt';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { Sparkles, Mail, Lock, User } from 'lucide-react';
 import { redirectIfAuthenticated } from '../lib/auth';
+import { rateLimit } from '../lib/ratelimit';
 
 export default async function Page() {
     await redirectIfAuthenticated();
@@ -12,6 +13,15 @@ export default async function Page() {
         'use server';
 
         const sql = neon(process.env.DATABASE_URL!);
+
+        // Rate limiting
+        const ip = (await headers()).get("x-forwarded-for") ?? "127.0.0.1";
+        const { success } = await rateLimit.auth.limit(ip);
+
+        if (!success) {
+            throw new Error('Too many attempts. Please try again later.');
+        }
+
         const email = formData.get('email') as string;
         const password = formData.get('password') as string;
         const hashedPassword = await bcrypt.hash(password, 10);

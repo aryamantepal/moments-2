@@ -3,7 +3,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { put } from '@vercel/blob';
 import { neon } from "@neondatabase/serverless";
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
+import { rateLimit } from '../../lib/ratelimit';
 import Navbar from '../../components/navbar';
 import Link from 'next/link';
 import { ArrowLeft, Upload, MapPin, Type, Image as ImageIcon } from 'lucide-react';
@@ -27,6 +28,12 @@ export default async function Page() {
 
         const cookieStore = await cookies();
         const userId = cookieStore.get('user_id')?.value;
+        const ip = (await headers()).get("x-forwarded-for") ?? "127.0.0.1";
+        const { success } = await rateLimit.createMoment.limit(userId ?? ip); // Rate limit by user ID if logged in, else IP
+
+        if (!success) {
+            throw new Error('You are posting too fast. Please try again later.');
+        }
 
         if (!userId) {
             redirect("/sign-in");
