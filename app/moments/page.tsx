@@ -2,7 +2,7 @@ import { getMoments } from '../lib/data';
 import Image from 'next/image';
 import Link from 'next/link';
 import Navbar from '../components/navbar';
-import { Plus, MapPin, Calendar } from 'lucide-react';
+import { Plus, MapPin, Calendar, Music } from 'lucide-react';
 import { requireAuth } from '../lib/auth';
 
 export const dynamic = 'force-dynamic';
@@ -83,6 +83,14 @@ export default async function Moments({
                                                         <div className="flex items-center space-x-1 text-sm text-white/90">
                                                             <MapPin className="w-3 h-3" />
                                                             <span>{moment.location}</span>
+                                                        </div>
+                                                    )}
+                                                    {moment.spotify_track && (
+                                                        <div className="flex items-center space-x-1 text-sm text-green-400 mt-1">
+                                                            <Music className="w-3 h-3" />
+                                                            <span className="truncate max-w-[200px]">
+                                                                {moment.spotify_track.name} • {moment.spotify_track.artist}
+                                                            </span>
                                                         </div>
                                                     )}
                                                 </div>

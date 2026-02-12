@@ -80,7 +80,7 @@ export async function createMomentAction(prevState: any, formData: FormData) {
 
         const sql = neon(process.env.DATABASE_URL!);
         await sql`
-            INSERT INTO moments (image_url, images, caption, location, author_id, latitude, longitude)
+            INSERT INTO moments (image_url, images, caption, location, author_id, latitude, longitude, spotify_track)
             VALUES (
                 ${imageUrls[0]},
                 ${JSON.stringify(imageUrls)}::jsonb,
@@ -88,7 +88,8 @@ export async function createMomentAction(prevState: any, formData: FormData) {
                 ${location},
                 ${Number(userId)},
                 ${latitude},
-                ${longitude}
+                ${longitude},
+                ${formData.get('spotify_track') ? JSON.parse(formData.get('spotify_track') as string) : null}
             )
         `;
         console.log("[createMomentAction] Database record created");

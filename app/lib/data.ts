@@ -46,7 +46,9 @@ async function fetchFromDb(cursor?: string) {
             moments.location,
             moments.created_at,
             moments.latitude,
+            moments.latitude,
             moments.longitude,
+            moments.spotify_track,
             users.id AS author_id,
             users.name AS author_name,
             users.email AS author_email
