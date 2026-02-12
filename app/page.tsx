@@ -36,20 +36,20 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto text-center">
           <div className="inline-flex items-center space-x-2 bg-gray-100 px-4 py-2 rounded-full mb-8">
             <Sparkles className="w-4 h-4 text-black" />
-            <span className="text-black font-medium text-sm">Capture Life's Beautiful Moments</span>
+            <span className="text-black font-medium text-sm">Capture Your Journeys in Sound & Vision</span>
           </div>
 
           <h1 className="text-5xl md:text-7xl font-bold text-black mb-6 leading-tight tracking-tight">
-            Your Memories,
+            Every Place Has a
             <br />
             <span className="text-gray-500">
-              Beautifully Preserved
+              Soundtrack
             </span>
           </h1>
 
           <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto">
-            Share and cherish your favorite moments with friends and family.
-            Create lasting memories in a beautiful, private space.
+            A social platform for travelers to share 'sound-scenes' — photo + music moments.
+            Experience the world through the eyes and ears of others.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">

@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Moments",
-  description: "travel blog",
+  description: "A social platform for travelers to share 'sound-scenes' — photo + music moments.",
 };
 
 export default function RootLayout({
