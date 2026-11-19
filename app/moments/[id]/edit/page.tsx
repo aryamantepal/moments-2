@@ -4,6 +4,8 @@ import { getCurrentUserId, requireAuth } from '@/app/lib/auth';
 import Navbar from '@/app/components/navbar';
 import Link from 'next/link';
 import { ArrowLeft, Save } from 'lucide-react';
+import { revalidatePath } from 'next/cache';
+import { invalidateFeedCache } from '@/app/lib/data';
 
 export default async function EditMomentPage({ params }: { params: Promise<{ id: string }> }) {
     const currentUser = await requireAuth();
@@ -53,6 +55,10 @@ export default async function EditMomentPage({ params }: { params: Promise<{ id:
                 location = ${location || null}
             WHERE id = ${id}
         `;
+
+        await invalidateFeedCache();
+        revalidatePath('/moments');
+        revalidatePath(`/moments/${id}`);
 
         redirect(`/moments/${id}`);
     }
