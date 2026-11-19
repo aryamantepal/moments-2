@@ -1,39 +1,42 @@
 import { Ratelimit } from "@upstash/ratelimit";
-import { Redis } from "@upstash/redis";
+import { redis } from "./redis";
 
-// Create a new ratelimiter, that allows 10 requests per 10 seconds
-const ratelimit = new Ratelimit({
-    redis: Redis.fromEnv(),
-    limiter: Ratelimit.slidingWindow(10, "10 s"),
-    analytics: true,
-    /**
-     * Optional prefix for the keys used in redis.
-     *
-     * @default "@upstash/ratelimit"
-     */
-    prefix: "@upstash/ratelimit",
-});
-
+/**
+ * Wrap a limiter so a Redis outage allows the request instead of crashing
+ * the page. Losing rate limiting briefly beats taking sign-in offline.
+ */
+function failOpen(limiter: Ratelimit) {
+    return {
+        async limit(key: string): Promise<{ success: boolean }> {
+            try {
+                return await limiter.limit(key);
+            } catch (err) {
+                console.error("Rate limiter unavailable, allowing request:", err);
+                return { success: true };
+            }
+        },
+    };
+}
 
 export const rateLimit = {
     // Stricter limit for auth actions (5 attempts per minute)
-    auth: new Ratelimit({
-        redis: Redis.fromEnv(),
+    auth: failOpen(new Ratelimit({
+        redis,
         limiter: Ratelimit.slidingWindow(5, "60 s"),
         prefix: "ratelimit:auth",
-    }),
+    })),
 
     // Looser limit for creating moments (3 moments per minute)
-    createMoment: new Ratelimit({
-        redis: Redis.fromEnv(),
+    createMoment: failOpen(new Ratelimit({
+        redis,
         limiter: Ratelimit.slidingWindow(3, "60 s"),
         prefix: "ratelimit:create_moment",
-    }),
+    })),
 
     // Track search fires as the user types (30 searches per minute)
-    spotifySearch: new Ratelimit({
-        redis: Redis.fromEnv(),
+    spotifySearch: failOpen(new Ratelimit({
+        redis,
         limiter: Ratelimit.slidingWindow(30, "60 s"),
         prefix: "ratelimit:spotify_search",
-    }),
+    })),
 };

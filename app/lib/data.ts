@@ -1,8 +1,7 @@
 import { neon } from '@neondatabase/serverless';
-import { Redis } from '@upstash/redis';
+import { redis } from './redis';
 
 const sql = neon(process.env.DATABASE_URL!);
-const redis = Redis.fromEnv();
 
 const CACHE_KEY = 'moments:feed:latest';
 const CACHE_TTL = 3600; // 1 hour
@@ -24,7 +23,10 @@ export async function getMoments(cursor?: string) {
     }
 
     // Try to get from cache for the first page
-    const cached = await redis.get<any[]>(CACHE_KEY);
+    const cached = await redis.get<any[]>(CACHE_KEY).catch((err) => {
+        console.error('Feed cache read failed:', err);
+        return null;
+    });
     if (cached) {
         console.log('CACHE HIT');
         return cached;
@@ -35,7 +37,9 @@ export async function getMoments(cursor?: string) {
 
     // Cache the result
     if (moments.length > 0) {
-        await redis.set(CACHE_KEY, moments, { ex: CACHE_TTL });
+        await redis.set(CACHE_KEY, moments, { ex: CACHE_TTL }).catch((err) => {
+            console.error('Feed cache write failed:', err);
+        });
     }
 
     return moments;

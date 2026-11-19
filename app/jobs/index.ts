@@ -1,7 +1,6 @@
-import { Redis } from '@upstash/redis';
+import { redis } from '@/app/lib/redis';
 import { revalidatePath } from 'next/cache';
 
-const redis = Redis.fromEnv();
 
 // The only cache key and path a job is allowed to touch. The request body
 // never chooses them, so a forged job can't delete arbitrary Redis keys.
