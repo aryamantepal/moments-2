@@ -1,22 +1,21 @@
-import { Redis } from '@upstash/redis';
+import { redis as sharedRedis } from './redis';
 
 const SPOTIFY_TOKEN_URL = 'https://accounts.spotify.com/api/token';
 const SPOTIFY_SEARCH_URL = 'https://api.spotify.com/v1/search';
 
 // Use Redis to cache the token if available, otherwise fallback to memory (for local dev without redis)
-const redis = process.env.UPSTASH_REDIS_REST_URL ? Redis.fromEnv() : null;
+const redis = process.env.UPSTASH_REDIS_REST_URL ? sharedRedis : null;
 
 let memoryToken: { value: string; expiresAt: number } | null = null;
 
 async function getAccessToken() {
     // 1. Check Redis/Memory Cache
     if (redis) {
-        const cachedToken = await redis.get<string>('spotify:access_token');
+        const cachedToken = await redis.get<string>('spotify:access_token').catch(() => null);
         if (cachedToken) return cachedToken;
-    } else {
-        if (memoryToken && Date.now() < memoryToken.expiresAt) {
-            return memoryToken.value;
-        }
+    }
+    if (memoryToken && Date.now() < memoryToken.expiresAt) {
+        return memoryToken.value;
     }
 
     // 2. Refresh Token
@@ -47,13 +46,14 @@ async function getAccessToken() {
     const expiresIn = data.expires_in; // usually 3600 seconds
 
     // 3. Cache Token
+    memoryToken = {
+        value: token,
+        expiresAt: Date.now() + (expiresIn - 60) * 1000,
+    };
     if (redis) {
-        await redis.set('spotify:access_token', token, { ex: expiresIn - 60 });
-    } else {
-        memoryToken = {
-            value: token,
-            expiresAt: Date.now() + (expiresIn - 60) * 1000,
-        };
+        await redis.set('spotify:access_token', token, { ex: expiresIn - 60 }).catch((err) => {
+            console.error('Spotify token cache write failed:', err);
+        });
     }
 
     return token;
