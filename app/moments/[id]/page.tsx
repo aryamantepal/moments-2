@@ -194,17 +194,20 @@ export default async function MomentPage({ params }: { params: Promise<{ id: str
                                         rel="noopener noreferrer"
                                         className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors group border border-gray-100"
                                     >
+                                        {moment.spotify_track.albumArtUrl && (
                                         <div className="relative w-12 h-12 flex-shrink-0">
                                             <Image
                                                 src={moment.spotify_track.albumArtUrl}
                                                 alt={moment.spotify_track.name}
                                                 fill
+                                                sizes="48px"
                                                 className="rounded-md object-cover shadow-sm"
                                             />
                                             <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/20 transition-colors rounded-md">
                                                 {/* Optional: Add play icon here if we want to get fancy later */}
                                             </div>
                                         </div>
+                                        )}
                                         <div className="min-w-0 flex-1">
                                             <p className="font-medium text-gray-900 group-hover:text-green-600 transition-colors truncate">
                                                 {moment.spotify_track.name}

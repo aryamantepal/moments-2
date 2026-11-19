@@ -8,6 +8,7 @@ import { revalidatePath } from "next/cache";
 import { rateLimit } from '@/app/lib/ratelimit';
 import { Redis } from '@upstash/redis';
 import { enqueueJob } from '@/app/lib/queue';
+import { parseSpotifyTrack } from '@/app/lib/spotify-client';
 import crypto from 'node:crypto';
 
 const redis = Redis.fromEnv();
@@ -89,7 +90,7 @@ export async function createMomentAction(prevState: any, formData: FormData) {
                 ${Number(userId)},
                 ${latitude},
                 ${longitude},
-                ${formData.get('spotify_track') ? JSON.parse(formData.get('spotify_track') as string) : null}
+                ${parseSpotifyTrack(formData.get('spotify_track'))}
             )
         `;
         console.log("[createMomentAction] Database record created");

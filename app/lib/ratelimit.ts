@@ -28,5 +28,12 @@ export const rateLimit = {
         redis: Redis.fromEnv(),
         limiter: Ratelimit.slidingWindow(3, "60 s"),
         prefix: "ratelimit:create_moment",
-    })
+    }),
+
+    // Track search fires as the user types (30 searches per minute)
+    spotifySearch: new Ratelimit({
+        redis: Redis.fromEnv(),
+        limiter: Ratelimit.slidingWindow(30, "60 s"),
+        prefix: "ratelimit:spotify_search",
+    }),
 };
