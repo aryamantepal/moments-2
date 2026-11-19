@@ -4,7 +4,7 @@ export const queue = new Client({
     token: process.env.QSTASH_TOKEN!,
 });
 
-type JobName = "process-image" | "revalidate-cache";
+import type { JobName } from "@/app/jobs";
 
 export async function enqueueJob(name: JobName, data: any) {
     if (process.env.NODE_ENV === "development") {

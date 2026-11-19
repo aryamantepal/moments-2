@@ -104,16 +104,8 @@ export async function createMomentAction(prevState: any, formData: FormData) {
         }
 
         try {
-            await enqueueJob("revalidate-cache", {
-                key: 'moments:feed:latest',
-                path: '/moments'
-            });
-
-            await enqueueJob("process-image", {
-                momentId: 0,
-                imageUrl: imageUrls[0]
-            });
-            console.log("[createMomentAction] Jobs enqueued");
+            await enqueueJob("revalidate-cache", {});
+            console.log("[createMomentAction] Job enqueued");
         } catch (jobErr) {
             console.error("[createMomentAction] Job enqueue failed (non-blocking):", jobErr);
         }

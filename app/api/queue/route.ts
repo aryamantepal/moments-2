@@ -4,7 +4,7 @@ import { jobs, JobName } from "@/app/jobs";
 
 async function handler(req: NextRequest) {
     const body = await req.json();
-    const { name, ...data } = body;
+    const { name } = body;
 
     console.log(`[Queue] Received job: ${name}`);
 
@@ -15,7 +15,7 @@ async function handler(req: NextRequest) {
     }
 
     try {
-        await jobHandler(data);
+        await jobHandler();
         return NextResponse.json({ success: true });
     } catch (err: any) {
         console.error(`[Queue] Job failed: ${err.message}`);
@@ -23,11 +23,20 @@ async function handler(req: NextRequest) {
     }
 }
 
-// Security: Verify the request comes from QStash
-// We check if keys exist to avoid crashing the Vercel build if they aren't set yet.
-export const POST = (process.env.QSTASH_CURRENT_SIGNING_KEY && process.env.QSTASH_NEXT_SIGNING_KEY)
+// Security: Verify the request comes from QStash. Without signing keys, only
+// local development may call the handler directly; everywhere else fails closed.
+const hasSigningKeys = Boolean(
+    process.env.QSTASH_CURRENT_SIGNING_KEY && process.env.QSTASH_NEXT_SIGNING_KEY
+);
+
+export const POST = hasSigningKeys
     ? verifySignatureAppRouter(handler)
-    : handler;
+    : process.env.NODE_ENV === "development"
+        ? handler
+        : async () => NextResponse.json(
+            { error: "QStash signing keys are not configured" },
+            { status: 500 }
+        );
 
 export const dynamic = 'force-dynamic';
 
