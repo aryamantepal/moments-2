@@ -1,4 +1,4 @@
-import { cookies } from 'next/headers';
+import { requireAuth } from '../lib/auth';
 import { neon } from '@neondatabase/serverless';
 import { redirect } from 'next/navigation';
 import Image from 'next/image';
@@ -11,19 +11,8 @@ export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
 export default async function UserProfile({ params }: { params: Promise<{ user: string }> }) {
-    const cookieStore = await cookies();
-    const userId = cookieStore.get('user_id')?.value;
-
-    if (!userId) {
-        redirect('/sign-in');
-    }
-
-    // Get current user info for navbar
+    const currentUser = await requireAuth();
     const sql = neon(process.env.DATABASE_URL!);
-    const currentUsers = await sql`
-        SELECT name FROM users WHERE id = ${userId} LIMIT 1
-    `;
-    const currentUser = currentUsers[0];
 
     // Await params since it's now a Promise in Next.js 15
     const { user } = await params;

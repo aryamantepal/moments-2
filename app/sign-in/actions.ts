@@ -2,9 +2,10 @@
 
 import { neon } from '@neondatabase/serverless';
 import * as bcrypt from 'bcrypt';
-import { cookies, headers } from 'next/headers';
+import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { rateLimit } from '@/app/lib/ratelimit';
+import { createSession } from '@/app/lib/auth';
 
 export async function signInAction(prevState: any, formData: FormData) {
     // Rate limiting
@@ -34,13 +35,7 @@ export async function signInAction(prevState: any, formData: FormData) {
         return { error: 'Invalid credentials' };
     }
 
-    const cookieStore = await cookies();
-    cookieStore.set('user_id', user.id.toString(), {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        maxAge: 60 * 60 * 24 * 7 // 1 week
-    });
+    await createSession(user.id);
 
     redirect('/moments');
 }

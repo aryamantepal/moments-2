@@ -1,7 +1,7 @@
 import { neon } from '@neondatabase/serverless';
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import { cookies } from 'next/headers';
+import { getCurrentUserId, requireAuth } from '@/app/lib/auth';
 import { redirect } from 'next/navigation';
 import Navbar from '../../components/navbar';
 import Link from 'next/link';
@@ -9,21 +9,10 @@ import { MapPin, Calendar, ArrowLeft, Heart, MessageCircle, Share2, Pencil, Tras
 import PhotoDumpViewer from '../../components/PhotoDumpViewer';
 
 export default async function MomentPage({ params }: { params: Promise<{ id: string }> }) {
-    const cookieStore = await cookies();
-    const userId = cookieStore.get('user_id')?.value;
-
-    if (!userId) {
-        redirect('/sign-in');
-    }
+    const currentUser = await requireAuth();
 
     const { id } = await params;
     const sql = neon(process.env.DATABASE_URL!);
-
-    // Get user info for navbar
-    const users = await sql`
-        SELECT name FROM users WHERE id = ${userId} LIMIT 1
-    `;
-    const currentUser = users[0];
 
     // Get moment details
     const moments = await sql`
@@ -47,7 +36,7 @@ export default async function MomentPage({ params }: { params: Promise<{ id: str
     const moment = moments[0];
     if (!moment) notFound();
 
-    const isAuthor = parseInt(userId) === moment.author_id;
+    const isAuthor = currentUser.id === moment.author_id;
 
     // Handle both new array format and old single string format
     // Although we backfilled, good to be safe or if type is loose
@@ -62,8 +51,7 @@ export default async function MomentPage({ params }: { params: Promise<{ id: str
         'use server';
 
         const momentID = formData.get('momentID') as string;
-        const cookieStore = await cookies();
-        const userId = cookieStore.get('user_id')?.value;
+        const userId = await getCurrentUserId();
 
         if (!userId) {
             redirect('/sign-in');
@@ -76,7 +64,7 @@ export default async function MomentPage({ params }: { params: Promise<{ id: str
             SELECT author_id FROM moments WHERE id = ${id}
         `;
 
-        if (moments.length === 0 || moments[0].author_id !== parseInt(userId)) {
+        if (moments.length === 0 || moments[0].author_id !== userId) {
             throw new Error('Unauthorized');
         }
 

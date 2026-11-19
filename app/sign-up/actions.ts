@@ -2,9 +2,10 @@
 
 import { neon } from '@neondatabase/serverless';
 import * as bcrypt from 'bcrypt';
-import { cookies, headers } from 'next/headers';
+import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { rateLimit } from '@/app/lib/ratelimit';
+import { createSession } from '@/app/lib/auth';
 
 export async function signUpAction(prevState: any, formData: FormData) {
     // Rate limiting
@@ -34,21 +35,13 @@ export async function signUpAction(prevState: any, formData: FormData) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     try {
-        await sql`
+        const users = await sql`
             INSERT INTO users (email, password_hash, name)
             VALUES (${email}, ${hashedPassword}, ${name})
+            RETURNING id
         `;
 
-        const users = await sql`SELECT * FROM users WHERE email = ${email} LIMIT 1`;
-        const user = users[0];
-
-        const cookieStore = await cookies();
-        cookieStore.set('user_id', user.id.toString(), {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
-            maxAge: 60 * 60 * 24 * 7 // 1 week
-        });
+        await createSession(users[0].id);
     } catch (e) {
         console.error('Sign up error:', e);
         return { error: 'Failed to create account. Please try again.' };
