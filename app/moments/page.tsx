@@ -21,7 +21,7 @@ export default async function Moments({
 
     const hasMore = moments.length > pageSize;
     const displayMoments = hasMore ? moments.slice(0, pageSize) : moments;
-    const nextCursor = hasMore ? moments[pageSize].created_at : null;
+    const nextCursor = hasMore ? displayMoments[displayMoments.length - 1].id : null;
 
     return (
         <div className="min-h-screen bg-gray-50">
