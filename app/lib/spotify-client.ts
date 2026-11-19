@@ -103,3 +103,48 @@ export async function searchTracks(query: string): Promise<SpotifyTrack[]> {
         externalUrl: item.external_urls.spotify,
     }));
 }
+
+function isHttpsUrlOn(value: unknown, hostname: string): value is string {
+    if (typeof value !== 'string') return false;
+    try {
+        const url = new URL(value);
+        return url.protocol === 'https:' && url.hostname === hostname;
+    } catch {
+        return false;
+    }
+}
+
+/**
+ * Validate a track submitted from the client. Returns null for anything that
+ * isn't a well-formed Spotify track, so arbitrary links never get stored.
+ */
+export function parseSpotifyTrack(raw: FormDataEntryValue | null): SpotifyTrack | null {
+    if (typeof raw !== 'string' || raw === '') return null;
+
+    let track: Record<string, unknown>;
+    try {
+        track = JSON.parse(raw);
+    } catch {
+        return null;
+    }
+
+    if (
+        !track ||
+        typeof track.id !== 'string' ||
+        typeof track.name !== 'string' ||
+        typeof track.artist !== 'string' ||
+        !isHttpsUrlOn(track.externalUrl, 'open.spotify.com')
+    ) {
+        return null;
+    }
+
+    return {
+        id: track.id,
+        name: track.name.slice(0, 200),
+        artist: track.artist.slice(0, 200),
+        album: typeof track.album === 'string' ? track.album.slice(0, 200) : '',
+        albumArtUrl: isHttpsUrlOn(track.albumArtUrl, 'i.scdn.co') ? track.albumArtUrl : '',
+        previewUrl: isHttpsUrlOn(track.previewUrl, 'p.scdn.co') ? track.previewUrl : null,
+        externalUrl: track.externalUrl,
+    };
+}

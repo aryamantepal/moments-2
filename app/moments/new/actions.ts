@@ -1,6 +1,7 @@
 'use server';
 
 import { put } from '@vercel/blob';
+import { parseSpotifyTrack } from '@/app/lib/spotify-client';
 import { neon } from "@neondatabase/serverless";
 import { headers } from 'next/headers';
 import { redirect } from "next/navigation";
@@ -89,7 +90,7 @@ export async function createMomentAction(prevState: any, formData: FormData) {
                 ${userId},
                 ${latitude},
                 ${longitude},
-                ${formData.get('spotify_track') ? JSON.parse(formData.get('spotify_track') as string) : null}
+                ${parseSpotifyTrack(formData.get('spotify_track'))}
             )
         `;
         console.log("[createMomentAction] Database record created");
