@@ -7,6 +7,8 @@ import Navbar from '../../components/navbar';
 import Link from 'next/link';
 import { MapPin, Calendar, ArrowLeft, Heart, MessageCircle, Share2, Pencil, Trash2 } from 'lucide-react';
 import PhotoDumpViewer from '../../components/PhotoDumpViewer';
+import { revalidatePath } from 'next/cache';
+import { invalidateFeedCache } from '@/app/lib/data';
 
 export default async function MomentPage({ params }: { params: Promise<{ id: string }> }) {
     const currentUser = await requireAuth();
@@ -47,10 +49,9 @@ export default async function MomentPage({ params }: { params: Promise<{ id: str
         imageList = [moment.image_url];
     }
 
-    async function deleteMoment(formData: FormData) {
+    async function deleteMoment() {
         'use server';
 
-        const momentID = formData.get('momentID') as string;
         const userId = await getCurrentUserId();
 
         if (!userId) {
@@ -59,19 +60,19 @@ export default async function MomentPage({ params }: { params: Promise<{ id: str
 
         const sql = neon(process.env.DATABASE_URL!);
 
-        // Verify ownership before deleting
-        const moments = await sql`
-            SELECT author_id FROM moments WHERE id = ${id}
+        // Delete only if the current user owns this moment
+        const deleted = await sql`
+            DELETE FROM moments
+            WHERE id = ${id} AND author_id = ${userId}
+            RETURNING id
         `;
 
-        if (moments.length === 0 || moments[0].author_id !== userId) {
+        if (deleted.length === 0) {
             throw new Error('Unauthorized');
         }
 
-        // Delete the moment
-        await sql`
-            DELETE FROM moments WHERE id = ${momentID}
-        `;
+        await invalidateFeedCache();
+        revalidatePath('/moments');
 
         redirect('/moments');
     }
@@ -100,7 +101,6 @@ export default async function MomentPage({ params }: { params: Promise<{ id: str
                             <span>Edit Moment</span>
                         </Link>
                         <form action={deleteMoment}>
-                            <input type="hidden" name="momentID" value={id} />
                             <button
                                 type="submit"
                                 className="flex items-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"

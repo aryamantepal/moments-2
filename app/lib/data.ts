@@ -7,6 +7,15 @@ const redis = Redis.fromEnv();
 const CACHE_KEY = 'moments:feed:latest';
 const CACHE_TTL = 3600; // 1 hour
 
+/** Drop the cached first feed page so the next request reads fresh rows. */
+export async function invalidateFeedCache() {
+    try {
+        await redis.del(CACHE_KEY);
+    } catch (err) {
+        console.error('Failed to clear feed cache:', err);
+    }
+}
+
 export async function getMoments(cursor?: string) {
     // If we have a cursor, we are scrolling. Skip cache to avoid complexity for now.
     // Also skip cache if we want fresh data (but here we focus on the first page).

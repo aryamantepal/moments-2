@@ -6,12 +6,10 @@ import { headers } from 'next/headers';
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { rateLimit } from '@/app/lib/ratelimit';
-import { Redis } from '@upstash/redis';
+import { invalidateFeedCache } from '@/app/lib/data';
 import { enqueueJob } from '@/app/lib/queue';
 import { getCurrentUserId } from '@/app/lib/auth';
 import crypto from 'node:crypto';
-
-const redis = Redis.fromEnv();
 
 export async function createMomentAction(prevState: any, formData: FormData) {
     console.log("[createMomentAction] Action started");
@@ -96,12 +94,7 @@ export async function createMomentAction(prevState: any, formData: FormData) {
 
         // Failsafe: Clear Redis cache synchronously so the feed updates immediately
         // even if the background job fails or is delayed.
-        try {
-            await redis.del('moments:feed:latest');
-            console.log("[createMomentAction] Cache cleared synchronously");
-        } catch (redisErr) {
-            console.error("[createMomentAction] Sync cache clear failed:", redisErr);
-        }
+        await invalidateFeedCache();
 
         try {
             await enqueueJob("revalidate-cache", {
