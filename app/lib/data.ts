@@ -32,8 +32,14 @@ export async function getMoments(cursor?: string) {
     return moments;
 }
 
+/**
+ * `cursor` is the id of the last moment on the previous page. Paging on
+ * (created_at, id) against that row avoids timestamp round-tripping through
+ * the URL, which lost precision and skipped rows.
+ */
 async function fetchFromDb(cursor?: string) {
     const pageSize = 12;
+    const cursorId = cursor && /^\d+$/.test(cursor) ? Number(cursor) : null;
     // Query one extra to check for hasMore
     const limit = pageSize + 1;
 
@@ -54,8 +60,10 @@ async function fetchFromDb(cursor?: string) {
             users.email AS author_email
         FROM moments
         JOIN users ON users.id = moments.author_id
-        WHERE ${cursor ? sql`moments.created_at < ${cursor}` : sql`TRUE`}
-        ORDER BY moments.created_at DESC
+        WHERE ${cursorId
+            ? sql`(moments.created_at, moments.id) < (SELECT created_at, id FROM moments WHERE id = ${cursorId})`
+            : sql`TRUE`}
+        ORDER BY moments.created_at DESC, moments.id DESC
         LIMIT ${limit}
     `;
 
