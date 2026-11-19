@@ -36,8 +36,7 @@ export default async function MomentPage({ params }: { params: Promise<{ id: str
             moments.created_at,
             moments.spotify_track,
             users.id AS author_id,
-            users.name AS author_name,
-            users.email AS author_email
+            users.name AS author_name
         FROM moments
         JOIN users ON users.id = moments.author_id
         WHERE moments.id = ${id}
@@ -146,17 +145,19 @@ export default async function MomentPage({ params }: { params: Promise<{ id: str
                                 <div className="flex items-center space-x-3">
                                     <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center">
                                         <span className="text-white font-medium text-lg">
-                                            {moment.author_name?.charAt(0).toUpperCase() || moment.author_email.charAt(0).toUpperCase()}
+                                            {moment.author_name?.charAt(0).toUpperCase() || '?'}
                                         </span>
                                     </div>
-                                    <div>
-                                        <p className="font-semibold text-gray-900">
-                                            {moment.author_name || 'Anonymous'}
-                                        </p>
-                                        <p className="text-sm text-gray-500">
-                                            {moment.author_email}
-                                        </p>
-                                    </div>
+                                    {moment.author_name ? (
+                                        <Link
+                                            href={`/${encodeURIComponent(moment.author_name)}`}
+                                            className="font-semibold text-gray-900 hover:underline"
+                                        >
+                                            {moment.author_name}
+                                        </Link>
+                                    ) : (
+                                        <p className="font-semibold text-gray-900">Anonymous</p>
+                                    )}
                                 </div>
                             </div>
 

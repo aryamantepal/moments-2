@@ -31,7 +31,7 @@ export default async function UserProfile({ params }: { params: Promise<{ user: 
 
     // Get profile user info
     const profileUsers = await sql`
-        SELECT id, name, email, created_at
+        SELECT id, name, created_at
         FROM users
         WHERE name = ${username}
         LIMIT 1
@@ -54,8 +54,7 @@ export default async function UserProfile({ params }: { params: Promise<{ user: 
             moments.latitude,
             moments.longitude,
             users.id AS author_id,
-            users.name AS author_name,
-            users.email AS author_email
+            users.name AS author_name
         FROM moments
         JOIN users ON users.id = moments.author_id
         WHERE users.name = ${username}
@@ -90,12 +89,9 @@ export default async function UserProfile({ params }: { params: Promise<{ user: 
 
                         {/* User Info */}
                         <div className="flex-1 text-center md:text-left">
-                            <h1 className="text-4xl font-bold text-gray-900 mb-2">
+                            <h1 className="text-4xl font-bold text-gray-900 mb-4">
                                 {username}
                             </h1>
-                            <p className="text-gray-600 mb-4">
-                                {profileUser.email}
-                            </p>
 
                             {/* Stats */}
                             <div className="flex flex-wrap justify-center md:justify-start gap-6 mb-6">

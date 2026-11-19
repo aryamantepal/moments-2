@@ -102,12 +102,12 @@ export default async function Moments({
                                                 <div className="flex items-center space-x-2">
                                                     <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
                                                         <span className="text-white font-medium text-xs">
-                                                            {moment.author_name?.charAt(0).toUpperCase() || moment.author_email.charAt(0).toUpperCase()}
+                                                            {moment.author_name?.charAt(0).toUpperCase() || '?'}
                                                         </span>
                                                     </div>
                                                     <div>
                                                         <p className="text-sm font-medium text-gray-900">
-                                                            {moment.author_name || moment.author_email}
+                                                            {moment.author_name || 'Anonymous'}
                                                         </p>
                                                     </div>
                                                 </div>
