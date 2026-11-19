@@ -1,24 +1,11 @@
-import { neon } from "@neondatabase/serverless";
-import { cookies } from 'next/headers';
-import { redirect } from "next/navigation";
+import { requireAuth } from '@/app/lib/auth';
 import Navbar from '../../components/navbar';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import NewMomentForm from './form';
 
 export default async function Page() {
-    const cookieStore = await cookies();
-    const userId = cookieStore.get('user_id')?.value;
-
-    if (!userId) {
-        redirect("/sign-in");
-    }
-
-    const sql = neon(process.env.DATABASE_URL!);
-    const users = await sql`
-        SELECT name FROM users WHERE id = ${userId} LIMIT 1
-    `;
-    const user = users[0];
+    const user = await requireAuth();
 
     return (
         <div className="min-h-screen bg-gray-50">

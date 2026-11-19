@@ -1,26 +1,15 @@
 import { neon } from '@neondatabase/serverless';
 import { notFound, redirect } from 'next/navigation';
-import { cookies } from 'next/headers';
+import { getCurrentUserId, requireAuth } from '@/app/lib/auth';
 import Navbar from '@/app/components/navbar';
 import Link from 'next/link';
 import { ArrowLeft, Save } from 'lucide-react';
 
 export default async function EditMomentPage({ params }: { params: Promise<{ id: string }> }) {
-    const cookieStore = await cookies();
-    const userId = cookieStore.get('user_id')?.value;
-
-    if (!userId) {
-        redirect('/sign-in');
-    }
+    const currentUser = await requireAuth();
 
     const { id } = await params;
     const sql = neon(process.env.DATABASE_URL!);
-
-    // Get user info
-    const users = await sql`
-        SELECT name FROM users WHERE id = ${userId} LIMIT 1
-    `;
-    const currentUser = users[0];
 
     // Get moment details
     const moments = await sql`
@@ -31,15 +20,14 @@ export default async function EditMomentPage({ params }: { params: Promise<{ id:
     if (!moment) notFound();
 
     // Check if current user is the author
-    if (moment.author_id !== parseInt(userId)) {
+    if (moment.author_id !== currentUser.id) {
         redirect('/moments');
     }
 
     async function updateMoment(formData: FormData) {
         'use server';
 
-        const cookieStore = await cookies();
-        const userId = cookieStore.get('user_id')?.value;
+        const userId = await getCurrentUserId();
 
         if (!userId) {
             redirect('/sign-in');
@@ -54,7 +42,7 @@ export default async function EditMomentPage({ params }: { params: Promise<{ id:
             SELECT author_id FROM moments WHERE id = ${id}
         `;
 
-        if (moments.length === 0 || moments[0].author_id !== parseInt(userId)) {
+        if (moments.length === 0 || moments[0].author_id !== userId) {
             throw new Error('Unauthorized');
         }
 

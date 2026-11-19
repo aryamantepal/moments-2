@@ -25,7 +25,7 @@ export default async function Moments({
 
     return (
         <div className="min-h-screen bg-gray-50">
-            <Navbar userName={user.username} currentPage="moments" />
+            <Navbar userName={user.name} currentPage="moments" />
 
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="flex items-center justify-between mb-8">

@@ -2,12 +2,13 @@
 
 import { put } from '@vercel/blob';
 import { neon } from "@neondatabase/serverless";
-import { cookies, headers } from 'next/headers';
+import { headers } from 'next/headers';
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { rateLimit } from '@/app/lib/ratelimit';
 import { Redis } from '@upstash/redis';
 import { enqueueJob } from '@/app/lib/queue';
+import { getCurrentUserId } from '@/app/lib/auth';
 import crypto from 'node:crypto';
 
 const redis = Redis.fromEnv();
@@ -16,8 +17,7 @@ export async function createMomentAction(prevState: any, formData: FormData) {
     console.log("[createMomentAction] Action started");
 
     try {
-        const cookieStore = await cookies();
-        const userId = cookieStore.get('user_id')?.value;
+        const userId = await getCurrentUserId();
 
         if (!userId) {
             console.log("[createMomentAction] Unauthorized");
@@ -27,7 +27,7 @@ export async function createMomentAction(prevState: any, formData: FormData) {
         // Rate limiting
         const ip = (await headers()).get("x-forwarded-for") ?? "127.0.0.1";
         console.log("[createMomentAction] Rate limiting for user:", userId);
-        const { success } = await rateLimit.createMoment.limit(userId ?? ip);
+        const { success } = await rateLimit.createMoment.limit(String(userId ?? ip));
 
         if (!success) {
             console.log("[createMomentAction] Rate limited");
@@ -86,7 +86,7 @@ export async function createMomentAction(prevState: any, formData: FormData) {
                 ${JSON.stringify(imageUrls)}::jsonb,
                 ${caption},
                 ${location},
-                ${Number(userId)},
+                ${userId},
                 ${latitude},
                 ${longitude},
                 ${formData.get('spotify_track') ? JSON.parse(formData.get('spotify_track') as string) : null}

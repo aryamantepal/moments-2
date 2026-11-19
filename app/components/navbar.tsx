@@ -1,8 +1,7 @@
 
 import Link from 'next/link';
 import { Sparkles, LogOut, Home, Image as ImageIcon, Map as MapIcon } from 'lucide-react';
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
+import { signOut } from '@/app/lib/auth';
 
 interface NavbarProps {
     userName?: string;
@@ -67,7 +66,7 @@ export default function Navbar({ userName, currentPage }: NavbarProps) {
                         )}
 
                         {/* Sign Out Button */}
-                        <form action={signOut}>
+                        <form action={signOutAction}>
                             <button
                                 type="submit"
                                 className="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
@@ -83,9 +82,7 @@ export default function Navbar({ userName, currentPage }: NavbarProps) {
     );
 }
 
-async function signOut() {
+async function signOutAction() {
     'use server';
-    const cookieStore = await cookies();
-    cookieStore.delete('user_id');
-    redirect('/sign-in');
+    await signOut();
 }
